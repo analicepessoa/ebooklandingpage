@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMusic App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lyrics-container::-webkit-scrollbar { width: 6px; }
+        .lyrics-container::-webkit-scrollbar-track { background: rgba(31, 41, 55, 0.5); border-radius: 4px; }
+        .lyrics-container::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+
+    <header class="bg-gray-800 border-b border-gray-700 p-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-4">
+            <h1 class="text-xl font-bold text-indigo-400 flex items-center gap-2 cursor-pointer" onclick="showScreen('home')">
+                <i class="fa-solid fa-music"></i> EduMusic
+            </h1>
+            <button onclick="showScreen('admin')" class="text-sm bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition flex items-center gap-2">
+                <i class="fa-solid fa-lock"></i> Painel Admin
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto max-w-4xl p-6">
+        
+        <section id="screen-home" class="space-y-6">
+            <div class="text-center py-6">
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Área do Aluno</h2>
+                <p class="text-gray-400 mt-2">Selecione a sua turma e digite a senha para acessar as atividades.</p>
+            </div>
+            <div id="turmas-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+        </section>
+
+        <section id="screen-playlist" class="hidden space-y-6">
+            <button onclick="showScreen('home')" class="text-indigo-400 hover:underline flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-arrow-left"></i> Voltar para turmas
+            </button>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                <span class="text-xs font-bold uppercase bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-md">ATIVIDADES DISPONÍVEIS</span>
+                <h2 id="playlist-turma-title" class="text-2xl font-bold text-white mt-2">Turma</h2>
+                <p class="text-gray-400 text-sm mt-1">Selecione uma das faixas abaixo para iniciar o treino.</p>
+            </div>
+            
+            <div id="playlist-container" class="grid grid-cols-1 gap-3"></div>
+        </section>
+
+        <section id="screen-turma" class="hidden space-y-6">
+            <button onclick="showScreen('playlist')" class="text-indigo-400 hover:underline flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-chevron-left"></i> Mudar de música
+            </button>
+            
+            <div class="bg-gradient-to-r from-gray-800 to-indigo-950 p-5 rounded-xl border border-gray-700 shadow-md">
+                <p class="text-xs text-indigo-300 uppercase font-extrabold tracking-widest mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Contexto da Canção</p>
+                <h2 id="music-context-title" class="text-xl font-bold text-white">Título da Música</h2>
+                <p id="music-context-desc" class="text-sm text-gray-300 mt-2 leading-relaxed">Contexto descritivo pedagógico.</p>
+            </div>
+
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-2xl flex flex-col sm:flex-row items-center gap-4 w-full">
+                <div class="flex items-center gap-4 w-full sm:w-auto flex-grow">
+                    <div id="disc-icon" class="bg-indigo-600/20 p-4 rounded-xl text-indigo-400">
+                        <i class="fa-solid fa-compact-disc text-3xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider">Apoio de Áudio:</p>
+                        <p id="audio-file-name" class="text-base font-bold text-white">arquivo.mp3</p>
+                    </div>
+                </div>
+                <audio id="audio-player" controls class="w-full sm:w-72 h-10 accent-indigo-500">
+                    <source id="audio-source" src="" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <div class="flex border-b border-gray-700">
+                <button id="tab-btn-pronuncia" onclick="switchTab('pronuncia')" class="flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition">
+                    <i class="fa-solid fa-microphone-lines mr-2"></i>Letra Completa & Pronúncia
+                </button>
+                <button id="tab-btn-significado" onclick="switchTab('significado')" class="flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition">
+                    <i class="fa-solid fa-language mr-2"></i>Tradução & Super Dicionário
+                </button>
+            </div>
+
+            <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 min-h-[400px]">
+                <div id="tab-content-pronuncia" class="space-y-4">
+                    <p class="text-xs text-gray-400 border-b border-gray-700 pb-2 italic">Dê o play no áudio acima e utilize o encarte abaixo para acompanhar a pronúncia fonética no seu próprio tempo.</p>
+                    <div id="lyrics-render-target" class="lyrics-container space-y-6 text-[17px] tracking-wide max-h-[500px] overflow-y-auto pr-2 pt-2 text-gray-100"></div>
+                </div>
+
+                <div id="tab-content-significado" class="hidden space-y-6">
+                    <div id="dictionary-render-target"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-admin" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-indigo-400"></i> Painel de Controle
+                </h2>
+                <button onclick="showScreen('home')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                    Visualizar App
+                </button>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 space-y-4">
+                <h3 class="text-lg font-medium text-gray-200">Cadastrar Nova Turma</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input type="text" id="new-turma-name" placeholder="Ex: Turma - IQ19/0004" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white">
+                    <input type="text" id="new-turma-pass" placeholder="Definir Senha do Aluno" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white">
+                </div>
+                <button onclick="addTurmaComSenha()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-lg font-semibold transition">Salvar Turma</button>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                <h3 class="text-lg font-medium text-gray-200 mb-4">Gerenciamento de Chaves Cadastradas</h3>
+                <ul id="admin-turmas-list" class="divide-y divide-gray-700"></ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-center py-6 text-xs text-gray-600 border-t border-gray-800">
+        EduMusic &copy; 2026 - Plataforma de Apoio Pedagógico Estilo App
+    </footer>
+
+    <script>
+        const musicData = {
+            animals: {
+                title: "Animals (Like Animals)",
+                artist: "BTS",
+                file: "animals.mp3",
+                contextTitle: "Animals (Like Animals) — BTS",
+                contextDesc: "Interpretada inteiramente em inglês, Animals usa metáforas selvagens para abordar autenticidade e liberdade emocional. Ideal para trabalhar Connected Speech, reduções cotidianas e vocabulários de natureza e sentimentos profundos.",
+                lyrics: [
+                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
+                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
+                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
+                    { eng: "Oh-oh-oh-oh", fon: "/ óu - óu - óu - óu /" },
+                    { eng: "Take me into your deep", fon: "/ teik mí íntu iór díp /" },
+                    { eng: "I wanna lay in your world", fon: "/ ái uána léi in iór uórld /" },
+                    { eng: "So what, your shadow's a mess", fon: "/ só uát, iór xédous a més /" },
+                    { eng: "I'm walkin' with my own dirt", fon: "/ áim uókin uíð mái óun dârt /" },
+                    { eng: "We can go all night", fon: "/ uí kén góu ól náit /" },
+                    { eng: "Don't you close your eyes", fon: "/ dónt iú klóuz iór áiz /" },
+                    { eng: "Don't you fear the light", fon: "/ dónt iú fír ðá láit /" },
+                    { eng: "All night", fon: "/ ól náit /" },
+                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
+                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
+                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
+                    { eng: "('Live, your, heart is full)", fon: "/ tíl iór hárt íz fúl /" },
+                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
+                    { eng: "(You, can, have it all, oh)", fon: "/ iú kén hév ít ól óu /" },
+                    { eng: "Six feet down in the sand", fon: "/ síks fít dáun ín ðá sênd /" },
+                    { eng: "There's creatures that made a hole", fon: "/ ðérz krítchârz ðét méid a hóul /" },
+                    { eng: "Do speak, I'm begging you, please", fon: "/ dú spík, áim bégin iú, plíz /" },
+                    { eng: "There's beauty outside control (Outside)", fon: "/ ðérz biúti áutsáid kôntróul /" },
+                    { eng: "Oh, we can go all night (Go all night)", fon: "/ óu, uí kén góu ól náit /" },
+                    { eng: "We can go all night (We can go all night)", fon: "/ uí kén góu ól náit /" },
+                    { eng: "Yeah, we should go all night", fon: "/ ié, uí xúd góu ól náit /" },
+                    { eng: "All night", fon: "/ ól náit /" },
+                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
+                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
+                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
+                    { eng: "('Til, your, heart is full)", fon: "/ tíl iór hárt íz fúl /" },
+                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
+                    { eng: "(You, can, have it all, oh)", fon: "/ iú kén hév ít ól óu /" },
+                    { eng: "Got you in the wild", fon: "/ gót iú ín ðá uáild /" },
+                    { eng: "Somewhere so far", fon: "/ sâm-uér só fár /" },
+                    { eng: "With your claws sharp", font: "/ uíð iór klós xárp /" },
+                    { eng: "And them fangs out", font: "/ énd ðém fêngs áut /" },
+                    { eng: "Now you see a whole land full of animals", fon: "/ náu iú sí a hóul lênd fúl óv énimaulz /" },
+                    { eng: "None of us are tameable", fon: "/ nân óv ás ár téimabl /" },
+                    { eng: "None of us are tameable", fon: "/ nân óv ás ár téimabl /" },
+                    { eng: "(Oh-oh-oh!)", fon: "/ óu óu óu /" },
+                    { eng: "Heart! (Oh-oh-oh!)", fon: "/ hárt! óu óu óu /" },
+                    { eng: "Untameable", fon: "/ án-téimabl /" },
+                    { eng: "(Oh-oh-oh!) Go (Take it all)", fon: "/ óu óu óu góu teik ít ól /" },
+                    { eng: "And take it all", fon: "/ énd teik ít ól /" },
+                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
+                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
+                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
+                    { eng: "(Heart, is 'Til my heart)", fon: "/ hárt íz tíl mái hárt /" },
+                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
+                    { eng: "(Take it all, oh)", fon: "/ teik ít ól óu /" }
+                ],
+                translation: [
+                    "Oh, oh, oh / Oh, oh, oh / Oh, oh, oh / Oh, oh, oh, oh", "Me leve para o seu lugar profundo, eu quero me deitar no seu mundo", "E daí se a sua sombra é uma bagunça? Eu estou caminhando com minhas próprias imperfeições", "Nós podemos ir a noite toda, não feche os seus olhos de jeito nenhum", "Não tenha medo da luz, a noite toda", "Se você quer ser selvagem, querido, nós podemos ser selvagens", "Devore essa vida até o seu coração ficar totalmente cheio", "Se você quiser, você pode ter tudo isso", "A seis pés de profundidade na areia, há criaturas que fizeram um buraco", "Fale sim, eu estou te implorando, por favor, há beleza fora do controle", "Oh, nós podemos ir a noite toda...", "Peguei você na selva, em algum lugar tão distante", "Com as suas garras afiadas e aquelas presas para fora", "Agora você vê uma terra inteira cheia de animais", "Nenhum de nós é domesticável, nenhum de nós é domesticável", "Coração! Indomável!", "Vá (pegue tudo) e pegue tudo", "Se você quer ser selvagem, querido, nós podemos ser selvagens", "Devore essa vida até o seu coração ficar cheio", "Se você quiser, você pode ter tudo"
+                ],
+                dictionary: [
+                    { word: "Wanna (Want to)", cat: "Contração Informal", desc: "A união de 'want' + 'to'. Usada para expressar desejo rápido e natural na fala fluida." },
+                    { word: "Into your deep", cat: "Expressão Poética", desc: "Para o seu profundo / sua intimidade. Indica mergulhar em sentimentos íntimos." },
+                    { word: "Lay (Lay down)", cat: "Verbo de Ação", desc: "Deitar-se ou repousar. Aqui expressa entrega emocional e conforto em um espaço seguro." },
+                    { word: "Shadow's a mess", cat: "Metáfora Psicológica", desc: "Literalmente 'a sombra é uma bagunça'. Refere-se aos lados obscuros e imperfeitos de alguém." },
+                    { word: "Own dirt", cat: "Vocabulário Figurado", desc: "'Minha própria sujeira'. Representa falhas pessoais, passados complicados ou defeitos aceitos." },
+                    { word: "Don't you close", cat: "Estrutura de Ênfase", desc: "O acréscimo do pronome 'you' em imperativos negativos serve para dar ordem firme e direta." },
+                    { word: "Six feet down", cat: "Expressão Cultural", desc: "Significa enterrado fundo, baseado na medida clássica tradicional dos EUA para covas." },
+                    { word: "Do speak", cat: "Gramática de Ênfase", desc: "O uso de 'Do' antes do verbo na afirmativa serve para enfatizar. Significa 'Fale sim!' ou 'Fale mesmo!'." },
+                    { word: "Outside control", cat: "Conceito Abstrato", desc: "Fora do controle padrão. Celebra o que é selvagem, imprevisível e natural." },
+                    { word: "Claws & Fangs", cat: "Substantivos da Natureza", desc: "Garras (claws) e presas afiadas (fangs) típicas de animais selvagens e predadores." },
+                    { word: "Tameable", cat: "Sufixo Adjetival", desc: "Domesticável. O sufixo '-able' indica capacidade/possibilidade de ser controlado." },
+                    { word: "Untameable", cat: "Prefixo de Negação", desc: "Indomável. O prefixo 'un-' inverte o significado de tameable, indicando espírito livre." }
+                ]
+            },
+            slave: {
+                title: "I Wanna Be Your Slave",
+                artist: "Måneskin",
+                file: "slave.mp3",
+                contextTitle: "I Wanna Be Your Slave — Måneskin",
+                contextDesc: "Lançada pela banda italiana Måneskin, esta faixa explora as dualidades dos relacionamentos através de contrastes marcantes. É excelente para ensinar oposições e gírias urbanas.",
+                lyrics: [
+                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
+                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" },
+                    { eng: "I wanna make your heartbeat", fon: "/ ái uána meik iór hárt-bít /" },
+                    { eng: "Run like rollercoasters", fon: "/ rân láik rólêrkóstêrz /" },
+                    { eng: "I wanna be a good boy", fon: "/ ái uána bí a gúd bói /" },
+                    { eng: "I wanna be a gangster", fon: "/ ái uána bí a gêngstêr /" },
+                    { eng: "'Cause you can be the beauty", fon: "/ kóz iú kén bí ðá biúti /" },
+                    { eng: "And I could be the monster", fon: "/ énd ái kúd bí ðá mónstêr /" },
+                    { eng: "I love you since this morning", fon: "/ ái láv iú síns ðís mórnin /" },
+                    { eng: "Not just for aesthetic", fon: "/ nót djást fór és-ðétik /" },
+                    { eng: "I wanna touch your body", fon: "/ ái uána tátch iór bódi /" },
+                    { eng: "So fucking electric", fon: "/ só fákin ilétrik /" },
+                    { eng: "I know you scared of me", fon: "/ ái nóu iú skérd óv mí /" },
+                    { eng: "You said that I'm too eccentric", fon: "/ iú séd ðét áim tú ikséntrik /" },
+                    { eng: "I'm crying all my tears", fon: "/ áim krái-in ól mái tírz /" },
+                    { eng: "And that's fucking pathetic", fon: "/ énd ðéts fákin pá-ðétik /" },
+                    { eng: "I wanna make you hungry", fon: "/ ái uána meik iú hângri /" },
+                    { eng: "Then I wanna feed ya", font: "/ ðén ái uána fíd iá /" },
+                    { eng: "I wanna paint your face", fon: "/ ái uána péint iór féis /" },
+                    { eng: "Like you're my Mona Lisa", fon: "/ láik iúr mái móna líza /" },
+                    { eng: "I wanna be a champion", fon: "/ ái uána bí a tchêmpiôn /" },
+                    { eng: "I wanna be a loser", fon: "/ ái uána bí a lúzêr /" },
+                    { eng: "I'll even be a clown", fon: "/ áil íven bí a kláun /" },
+                    { eng: "'Cause I just wanna amuse ya", fon: "/ kóz ái djást uána amiúz iá /" },
+                    { eng: "I wanna be your sex toy", fon: "/ ái uána bí iór séks tói /" },
+                    { eng: "I wanna be your teacher", fon: "/ ái uána bí iór títchêr /" },
+                    { eng: "I wanna be your sin", fon: "/ ái uána bí iór sín /" },
+                    { eng: "I wanna be a preacher", fon: "/ ái uána bí a prítchêr /" },
+                    { eng: "I wanna make you love me", fon: "/ ái uána meik iú láv mí /" },
+                    { eng: "Then I wanna leave ya", fon: "/ ðén ái uána lív iá /" },
+                    { eng: "'Cause baby I'm your David", fon: "/ kóz béibi áim iór déivid /" },
+                    { eng: "And you're my Goliath", fon: "/ énd iúr mái goláiað /" },
+                    { eng: "Because I'm the devil who's searching for redemption", fon: "/ bikóz áim ðá dévil húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a lawyer who's searching for redemption", fon: "/ énd áim a lói-êr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a killer who's searching for redemption", fon: "/ énd áim a kílêr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a bad guy who's searching for redemption", fon: "/ énd áim a béd gái húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a blond girl who's searching for redemption", fon: "/ énd áim a blónd gârl húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a freak that is searching for redemption", fon: "/ énd áim a frík ðét íz sêrtchin fór ridêmpxôn /" },
+                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
+                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" },
+                    { eng: "I wanna make your heart beat", fon: "/ ái uána meik iór hért bít /" },
+                    { eng: "Run like rollercoasters", fon: "/ rân láik rólêrkóstêrz /" },
+                    { eng: "I wanna be a good boy", fon: "/ ái uána bí a gúd bói /" },
+                    { eng: "I wanna be a gangster", fon: "/ ái uána bí a gêngstêr /" },
+                    { eng: "'Cause you can be the beauty", fon: "/ kóz iú kén bí ðá biúti /" },
+                    { eng: "And I could be the monster", fon: "/ énd ái kúd bí ðá mónstêr /" },
+                    { eng: "I wanna make you quiet", fon: "/ ái uána meik iú kuáiet /" },
+                    { eng: "I wanna make you nervous", fon: "/ ái uána meik iú nêrvôs /" },
+                    { eng: "I wanna set you free", fon: "/ ái uána sét iú frí /" },
+                    { eng: "But I'm too fucking jealous", fon: "/ bót áim tú fákin djélôs /" },
+                    { eng: "I wanna pull your strings", fon: "/ ái uána púl iór stríngz /" },
+                    { eng: "Like you're my telecaster", fon: "/ láik iúr mái t̂elikâstêr /" },
+                    { eng: "And if you want to use me", font: "/ énd íf iú uánt tu iúz mí /" },
+                    { eng: "I could be your puppet", font: "/ ái kúd bí iór pápet /" },
+                    { eng: "'Cause I'm the devil who's searching for redemption", fon: "/ kóz áim ðá dévil húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a lawyer who's searching for redemption", fon: "/ énd áim a lói-êr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "And I'm a killer who's searching for redemption", fon: "/ énd áim a kílêr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
+                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
+                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" }
+                ],
+                translation: [
+                    "Eu quero ser seu escravo, eu quero ser seu mestre", "Eu quero fazer seu coração correr como montanhas-russas", "Eu quero ser um bom menino, eu quero ser um gângster", "Porque você pode ser a bela e eu poderia ser o monstro", "Eu te amo desde hoje de manhã, não apenas por estética", "Eu quero tocar o seu corpo, tão elétrico", "Eu sei que você tem medo de mim, você disse que sou excêntrico demais", "Estou chorando todas as minhas lágrimas e isso é patético demais", "Eu quero te deixar com fome, e depois eu quero te alimentar", "Eu quero pintar o seu rosto como se você fosse minha Mona Lisa", "Eu quero ser um campeão, eu quero ser um perdedor", "Eu vou até ser um palhaço porque eu só quero te entreter", "Eu quero ser seu brinquedo, eu quero ser seu professor", "Eu quero ser seu pecado, eu quero ser um pregador", "Eu quero fazer você me amar, e depois eu quero te deixar", "Porque, querida, eu sou o seu Davi e você é o meu Golias", "Porque eu sou o demônio que está procurando por redemption/redenção", "E eu sou um advogado que está procurando por redenção", "E eu sou um assassino que está procurando por redenção", "Eu sou um monstro maldito que está procurando por redenção", "E eu sou um cara mau que está procurando por redenção", "E eu sou uma garota loira que está procurando por redenção", "E eu sou um esquisito que está procurando por redenção", "Eu sou um monstro maldito que está procurando por redenção", "Eu quero ser seu escravo, eu quero ser seu mestre", "Eu quero fazer seu coração correr como montanhas-russas", "Eu quero ser um bom menino, eu quero ser um gângster", "Porque você pode ser a bela e eu poderia ser o monstro", "Eu quero te deixar quieta, eu quero te deixar nervosa", "Eu quero te libertar, mas sou ciumento demais", "Eu quero controlar os seus cordões como se você fosse minha guitarra Telecaster", "E se você quiser me usar, eu poderia ser o seu fantoche", "Arrependimento/Redenção nos versos finais...", "Eu quero ser seu escravo, eu quero ser seu mestre"
+                ],
+                dictionary: [
+                    { word: "Rollercoasters", cat: "Vocabulário", desc: "Montanhas-russas. Simboliza uma mistura extrema de adrenalina, picos e quedas emocionais." },
+                    { word: "Aesthetic", cat: "Substantivo / Adjetivo", desc: "Estética / Aparência visual. Indica que o sentimento vai além do superficial." },
+                    { word: "Eccentric", cat: "Adjetivo de Caráter", desc: "Excêntrico, extravagante, peculiar. Alguém que age fora do padrão social comum." },
+                    { word: "Pathetic", cat: "Adjetivo Forte", desc: "Patético, lamentável. Expressa uma autocrítica severa sobre demonstrar fraqueza." },
+                    { word: "Feed ya (Feed you)", cat: "Gíria / Redução", desc: "Alimentar você. O 'ya' substitui 'you' de forma rítmica na música e fala informal." },
+                    { word: "Amuse ya", cat: "Verbo de Ação", desc: "Entreter você / Fazer você sorrir ou se distrair. Mostrar-se disposto a agradar." },
+                    { word: "Preacher", cat: "Profissão / Vocabulário", desc: "Pregador / Pastor. Usado em oposição direta à palavra 'sin' (pecado) na estrofe." },
+                    { word: "David & Goliath", cat: "Alusão Cultural", desc: "Davi e Golias. Clássica metáfora sobre uma dinâmica de forças muito desigual." },
+                    { word: "Redemption", cat: "Substantivo Abstrato", desc: "Redenção, salvação ou absolvição de falhas morais cometidas no passado." },
+                    { word: "Jealous", cat: "Sentimento", desc: "Cumento, invejoso. Descreve a posse exagerada mencionada no verso." },
+                    { word: "Pull your strings", cat: "Expressão Idiomática", desc: "Manipular alguém por trás dos panos, controlando as ações da pessoa como um fantoche." },
+                    { word: "Puppet", cat: "Substantivo", desc: "Marionete ou fantoche. Alguém totalmente vulnerável ao controle de terceiros." }
+                ]
+            }
+        };
+
+        const defaultTurmasConfig = [
+            { name: "Turma - IQ19/0004", pass: "iq1904", musics: ["animals", "slave"] },
+            { name: "Turma Teste", pass: "teste123", musics: ["animals"] },
+            { name: "Turma - IQ15/0003", pass: "1234", musics: ["animals"] },
+            { name: "Turma - IQ19/0013", pass: "1234", musics: ["animals"] },
+            { name: "Turma - IQ19/007", pass: "1234", musics: ["animals"] },
+            { name: "Turma - IS08/0008", pass: "1234", musics: ["animals"] }
+        ];
+
+        let database = JSON.parse(localStorage.getItem('edu_db')) || defaultTurmasConfig;
+        let currentActiveTurma = null;
+
+        const audioPlayer = document.getElementById('audio-player');
+        const discIcon = document.getElementById('disc-icon');
+
+        audioPlayer.addEventListener('play', () => discIcon.classList.add('animate-spin'));
+        audioPlayer.addEventListener('pause', () => discIcon.classList.remove('animate-spin'));
+
+        function showScreen(screenId) {
+            document.getElementById('screen-home').classList.add('hidden');
+            document.getElementById('screen-playlist').classList.add('hidden');
+            document.getElementById('screen-turma').classList.add('hidden');
+            document.getElementById('screen-admin').classList.add('hidden');
+            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+            
+            if (screenId !== 'turma' && audioPlayer) audioPlayer.pause();
+            if (screenId === 'home' || screenId === 'admin') renderApp();
+        }
+
+        function renderApp() {
+            const grid = document.getElementById('turmas-grid');
+            const adminList = document.getElementById('admin-turmas-list');
+            grid.innerHTML = '';
+            adminList.innerHTML = '';
+
+            database.forEach((item, index) => {
+                const isTarget = item.name.includes("IQ19/0004");
+                const card = document.createElement('div');
+                card.className = `border p-6 rounded-xl cursor-pointer transition transform hover:-translate-y-1 shadow-lg flex flex-col justify-between group ${isTarget ? 'bg-indigo-950/40 border-indigo-500/50 hover:bg-indigo-900/50' : 'bg-gray-800 border-gray-700 hover:border-gray-500'}`;
+                card.onclick = () => verifyAccess(item);
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="p-3 rounded-lg bg-gray-700 text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-graduation-cap text-xl"></i>
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-900 text-gray-400 border border-gray-700">Protegida</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mt-4">${item.name}</h3>
+                `;
+                grid.appendChild(card);
+
+                const li = document.createElement('li');
+                li.className = "py-3 flex justify-between items-center";
+                li.innerHTML = `
+                    <div>
+                        <span class="text-gray-200 font-medium block">${item.name}</span>
+                        <span class="text-xs text-gray-500 font-mono">Chave: <span class="text-emerald-400 font-bold">${item.pass}</span></span>
+                    </div>
+                    <button onclick="deleteTurma(${index})" class="text-red-400 hover:text-red-300 p-2 transition"><i class="fa-solid fa-trash-can"></i></button>
+                `;
+                adminList.appendChild(li);
+            });
+        }
+
+        function verifyAccess(item) {
+            const typedPassword = prompt(`Digite a senha da [ ${item.name} ] para entrar:`);
+            if (typedPassword === null) return;
+            
+            if (typedPassword === item.pass) {
+                currentActiveTurma = item;
+                document.getElementById('playlist-turma-title').innerText = item.name;
+                
+                const pContainer = document.getElementById('playlist-container');
+                pContainer.innerHTML = "";
+                
+                const mList = item.musics || ["animals"];
+                mList.forEach((mKey) => {
+                    const mInfo = musicData[mKey];
+                    const card = document.createElement('div');
+                    card.className = "bg-gray-800 hover:bg-gray-750 border border-gray-700 hover:border-indigo-500 p-5 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-lg";
+                    card.onclick = () => openMusic(mKey);
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <div class="bg-indigo-600/10 text-indigo-400 p-3.5 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-play text-xl pl-0.5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">${mInfo.title}</h3>
+                                <p class="text-sm text-gray-400">${mInfo.artist}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-semibold bg-gray-700 text-gray-300 px-3 py-1 rounded-full group-hover:bg-indigo-950 group-hover:text-indigo-300 transition">Iniciar Atividade</span>
+                    `;
+                    pContainer.appendChild(card);
+                });
+                
+                showScreen('playlist');
+            } else {
+                alert("❌ Senha incorreta!");
+            }
+        }
+
+        function openMusic(musicKey) {
+            const data = musicData[musicKey];
+            
+            document.getElementById('music-context-title').innerText = data.contextTitle;
+            document.getElementById('music-context-desc').innerText = data.contextDesc;
+            document.getElementById('audio-file-name').innerText = data.file;
+            document.getElementById('audio-source').src = data.file;
+            audioPlayer.load();
+
+            const lyricsTarget = document.getElementById('lyrics-render-target');
+            lyricsTarget.innerHTML = "";
+            data.lyrics.forEach((line) => {
+                const div = document.createElement('div');
+                div.className = "space-y-0.5 border-b border-gray-800/40 pb-2";
+                div.innerHTML = `
+                    <p class="text-white font-medium text-base">${line.eng}</p>
+                    <p class="text-sm text-indigo-300/80 font-mono">${line.fon}</p>
+                `;
+                lyricsTarget.appendChild(div);
+            });
+
+            const dictTarget = document.getElementById('dictionary-render-target');
+            let dictHTML = `<div><h3 class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-3">🗝️ Super Dicionário (${data.dictionary.length} Pontos de Ensino)</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+            data.dictionary.forEach((item) => {
+                dictHTML += `
+                    <div class="p-3 bg-gray-800 rounded-lg border-l-4 border-indigo-500 space-y-1">
+                        <span class="font-bold text-white block">${item.word}</span>
+                        <span class="text-xs font-bold text-indigo-300">${item.cat}</span>
+                        <p class="text-sm text-gray-300">${item.desc}</p>
+                    </div>
+                `;
+            });
+            dictHTML += `</div></div><div class="border-t border-gray-700 pt-4"><h3 class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-3">📝 Tradução Completa</h3><div class="space-y-2 text-sm text-gray-300 font-sans max-h-[300px] overflow-y-auto pr-2">`;
+            data.translation.forEach((transLine) => {
+                dictHTML += `<p>${transLine}</p>`;
+            });
+            dictHTML += `</div></div>`;
+            dictTarget.innerHTML = dictHTML;
+
+            showScreen('turma');
+            switchTab('pronuncia');
+        }
+
+        function switchTab(tabId) {
+            const tabBtnPronuncia = document.getElementById('tab-btn-pronuncia');
+            const tabBtnSignificado = document.getElementById('tab-btn-significado');
+            const contentPronuncia = document.getElementById('tab-content-pronuncia');
+            const contentSignificado = document.getElementById('tab-content-significado');
+
+            if (tabId === 'pronuncia') {
+                contentPronuncia.classList.remove('hidden');
+                contentSignificado.classList.add('hidden');
+                tabBtnPronuncia.className = "flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition";
+                tabBtnSignificado.className = "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
+            } else {
+                contentPronuncia.classList.add('hidden');
+                contentSignificado.classList.remove('hidden');
+                tabBtnSignificado.className = "flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition";
+                tabBtnPronuncia.className = "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
+            }
+        }
+
+        function addTurmaComSenha() {
+            const nameInput = document.getElementById('new-turma-name');
+            const passInput = document.getElementById('new-turma-pass');
+            const name = nameInput.value.trim();
+            const pass = passInput.value.trim();
+            
+            if (name && pass) {
+                database.push({ name, pass, musics: ["animals"] });
+                localStorage.setItem('edu_db', JSON.stringify(database));
+                nameInput.value = '';
+                passInput.value = '';
+                renderApp();
+                alert(`Sucesso! A "${name}" foi adicionada.`);
+            }
+        }
+
+        function deleteTurma(index) {
+            if (confirm("Tem certeza que deseja apagar esta turma?")) {
+                database.splice(index, 1);
+                localStorage.setItem('edu_db', JSON.stringify(database));
+                renderApp();
+            }
+        }
+
+        renderApp();
+    </script>
+</body>
+</html>
