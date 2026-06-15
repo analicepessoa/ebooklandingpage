@@ -1,485 +1,678 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduMusic App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .lyrics-container::-webkit-scrollbar { width: 6px; }
-        .lyrics-container::-webkit-scrollbar-track { background: rgba(31, 41, 55, 0.5); border-radius: 4px; }
-        .lyrics-container::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 4px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-book · Crie Landing Pages que Vendem com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F7F6;
+    --paper:#FFFFFF;
+    --ink:#13201C;
+    --teal:#0E6B53;
+    --teal-deep:#0A4E3C;
+    --teal-soft:#E3F1EC;
+    --coral:#FF5A3C;
+    --coral-soft:#FFE9E3;
+    --gold:#E8A53A;
+    --gold-soft:#FBEFD8;
+    --text:#283330;
+    --muted:#5E6B66;
+    --line:#DCE6E2;
+    --radius:18px;
+    --shadow:0 14px 40px -22px rgba(10,60,45,.45);
+    --maxw:880px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque','Inter',sans-serif;color:var(--ink);line-height:1.12;letter-spacing:-.02em;margin:0}
+  p{margin:0 0 1em}
+  a{color:var(--teal)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  /* progress bar */
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:99;transition:width .12s ease-out}
+
+  /* ---------- COVER ---------- */
+  .cover{
+    background:radial-gradient(120% 90% at 80% -10%, #147d61 0%, var(--teal-deep) 55%, #073026 100%);
+    color:#fff;padding:74px 0 64px;position:relative;overflow:hidden;
+  }
+  .cover::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(60% 40% at 15% 110%, rgba(255,90,60,.28), transparent 60%);
+    pointer-events:none}
+  .cover .wrap{position:relative;z-index:2}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.22);padding:7px 15px;border-radius:999px;
+    font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .cover h1{color:#fff;font-size:clamp(34px,7vw,60px);font-weight:800;margin:22px 0 14px}
+  .cover h1 em{font-style:normal;color:var(--gold)}
+  .cover .lead{font-size:clamp(17px,2.4vw,21px);color:#d6efe6;max-width:620px;margin-bottom:30px}
+  .cover-tags{display:flex;flex-wrap:wrap;gap:10px}
+  .cover-tags span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500}
+
+  /* ---------- TOC ---------- */
+  .toc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);margin:-36px auto 0;position:relative;z-index:5;padding:30px 30px 14px}
+  .toc h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:18px}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .toc li a{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--text);
+    padding:11px 12px;border-radius:12px;font-weight:500;transition:background .15s}
+  .toc li a:hover,.toc li a:focus-visible{background:var(--teal-soft);outline:none}
+  .toc .n{font-family:'Bricolage Grotesque';font-weight:800;color:var(--coral);min-width:24px}
+
+  /* ---------- SECTIONS ---------- */
+  section.aula{padding:54px 0 6px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  .eyebrow .chip{background:var(--coral);color:#fff;width:34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;font-family:'Bricolage Grotesque';font-size:17px;letter-spacing:0}
+  section.aula h2{font-size:clamp(26px,4.4vw,36px);font-weight:800;margin-bottom:6px}
+  .aula-sub{color:var(--muted);font-size:18px;margin:6px 0 26px;max-width:640px}
+  .block{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 28px;margin:0 0 20px;box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .block h3{font-size:21px;margin-bottom:10px}
+  .block h3 .em{font-size:24px;margin-right:6px}
+
+  ul.ticks{list-style:none;margin:0 0 .5em;padding:0}
+  ul.ticks li{position:relative;padding:6px 0 6px 32px;}
+  ul.ticks li::before{content:"✅";position:absolute;left:0;top:5px;font-size:15px}
+  ul.dots{margin:0 0 .5em;padding-left:22px}
+  ul.dots li{margin:5px 0}
+
+  /* PASSO steps */
+  .passo{display:flex;gap:18px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 24px;margin:0 0 16px;box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .passo .num{flex:none;width:48px;height:48px;border-radius:14px;background:var(--teal);color:#fff;
+    font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;display:grid;place-items:center}
+  .passo h3{font-size:20px;margin-bottom:6px}
+  .passo p:last-child{margin-bottom:0}
+
+  /* callouts */
+  .call{border-radius:var(--radius);padding:20px 22px 20px 56px;margin:0 0 20px;position:relative;font-size:16.5px}
+  .call .ic{position:absolute;left:18px;top:18px;font-size:22px}
+  .call b{font-weight:700}
+  .call.tip{background:var(--gold-soft);border:1px solid #efd9a8}
+  .call.warn{background:var(--coral-soft);border:1px solid #ffc8bb}
+  .call.fact{background:var(--teal-soft);border:1px solid #bfe2d6}
+  .call.do{background:#EDF6F0;border:1px solid #cfe7d8}
+  .call h4{font-size:16px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;color:var(--teal-deep)}
+  .call.warn h4{color:#c23a1f}
+  .call.tip h4{color:#9a6b15}
+
+  /* cards grid */
+  .grid{display:grid;gap:16px}
+  .grid.g2{grid-template-columns:1fr 1fr}
+  .grid.g4{grid-template-columns:1fr 1fr}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+    box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .card .ico{font-size:30px;display:block;margin-bottom:10px}
+  .card h4{font-size:18px;margin-bottom:6px}
+  .card p{font-size:15.5px;color:var(--muted);margin:0}
+  .card .meta-num{font-family:'Bricolage Grotesque';font-weight:800;color:var(--coral);font-size:14px;letter-spacing:.08em}
+
+  /* compare table */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;margin-bottom:20px;background:var(--paper)}
+  .vs .head{padding:18px 22px;color:#fff;font-family:'Bricolage Grotesque';font-weight:800;font-size:20px}
+  .vs .head.a{background:var(--teal)}
+  .vs .head.b{background:var(--coral)}
+  .vs .col{padding:6px 22px 18px}
+  .vs ul{list-style:none;margin:14px 0 0;padding:0}
+  .vs ul li{padding:8px 0 8px 26px;position:relative;border-top:1px solid var(--line);font-size:15.5px}
+  .vs ul li:first-child{border-top:none}
+  .vs ul li::before{content:"▸";position:absolute;left:4px;color:var(--teal);font-weight:700}
+  .vs .b ul li::before{color:var(--coral)}
+
+  /* anatomy figure */
+  .figure{background:linear-gradient(180deg,#0c5341,#073026);border-radius:var(--radius);
+    padding:32px 22px;margin:6px 0 22px;text-align:center}
+  .figure svg{max-width:100%;height:auto}
+  .figcap{color:#bfe2d6;font-size:14px;margin-top:14px}
+
+  /* glossary */
+  .gloss{background:var(--ink);color:#e6f2ec;border-radius:var(--radius);padding:28px 28px 14px}
+  .gloss h3{color:#fff}
+  .gloss .row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;
+    padding:14px 0;border-top:1px solid rgba(255,255,255,.12)}
+  .gloss .row:first-of-type{border-top:none}
+  .gloss .term{font-family:'Bricolage Grotesque';font-weight:700;color:var(--gold);font-size:18px}
+  .gloss .pron{font-family:'Inter';color:#7fd3b6;font-size:14px;font-style:italic}
+  .gloss .def{flex:1 1 100%;color:#cfe2da;font-size:15px;margin-top:2px}
+
+  /* quiz */
+  .quiz{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:16px}
+  .quiz .q{font-weight:700;color:var(--ink);font-family:'Bricolage Grotesque';font-size:18px;margin-bottom:12px}
+  .quiz .opts{display:grid;gap:8px;margin-bottom:8px}
+  .quiz .opts label{display:flex;gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;font-size:15.5px;transition:background .15s,border-color .15s}
+  .quiz .opts label:hover{background:var(--teal-soft)}
+  .quiz details{margin-top:6px}
+  .quiz summary{cursor:pointer;color:var(--coral);font-weight:600;font-size:14.5px}
+  .quiz details p{background:var(--teal-soft);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:15px}
+
+  /* checklist */
+  .checklist{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:10px 26px;margin-bottom:20px}
+  .checklist label{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line);cursor:pointer}
+  .checklist label:first-child{border-top:none}
+  .checklist input{margin-top:5px;width:20px;height:20px;accent-color:var(--teal);flex:none}
+  .checklist .ct{font-weight:600;color:var(--ink)}
+  .checklist .cd{display:block;color:var(--muted);font-size:14.5px;font-weight:400}
+
+  blockquote{margin:0 0 20px;padding:18px 24px;border-left:4px solid var(--gold);
+    background:var(--gold-soft);border-radius:0 12px 12px 0;font-style:italic;color:#5a4a22}
+  blockquote cite{display:block;font-style:normal;font-weight:600;color:var(--ink);margin-top:8px;font-size:14px}
+
+  hr.div{border:none;border-top:1px solid var(--line);margin:46px 0 0}
+
+  footer{background:var(--ink);color:#9fc6b8;text-align:center;padding:40px 22px;margin-top:56px;font-size:14px}
+  footer strong{color:#fff}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (max-width:680px){
+    body{font-size:16px}
+    .toc ol{grid-template-columns:1fr}
+    .grid.g2,.grid.g4,.vs{grid-template-columns:1fr}
+    .vs .col{border-top:1px solid var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    #progress{transition:none}
+  }
+</style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans min-h-screen flex flex-col">
+<body>
+<div id="progress"></div>
 
-    <header class="bg-gray-800 border-b border-gray-700 p-4 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center px-4">
-            <h1 class="text-xl font-bold text-indigo-400 flex items-center gap-2 cursor-pointer" onclick="showScreen('home')">
-                <i class="fa-solid fa-music"></i> EduMusic
-            </h1>
-            <button onclick="showScreen('admin')" class="text-sm bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded-lg transition flex items-center gap-2">
-                <i class="fa-solid fa-lock"></i> Painel Admin
-            </button>
-        </div>
-    </header>
+<!-- ============ COVER ============ -->
+<header class="cover">
+  <div class="wrap">
+    <span class="badge">📘 E-book · Marketing Digital na Prática</span>
+    <h1>Crie Landing Pages que <em>Vendem</em> com Inteligência Artificial</h1>
+    <p class="lead">Do zero ao site no ar em minutos. Aprenda a estrutura que converte visitantes em clientes — mesmo sem saber design ou programação.</p>
+    <div class="cover-tags">
+      <span>🎯 Estratégia antes do botão</span>
+      <span>🤖 Criação com IA</span>
+      <span>💰 Foco em vendas</span>
+      <span>🇧🇷 Ferramentas usadas no Brasil</span>
+    </div>
+  </div>
+</header>
 
-    <main class="flex-grow container mx-auto max-w-4xl p-6">
-        
-        <section id="screen-home" class="space-y-6">
-            <div class="text-center py-6">
-                <h2 class="text-3xl font-extrabold text-white tracking-tight">Área do Aluno</h2>
-                <p class="text-gray-400 mt-2">Selecione a sua turma e digite a senha para acessar as atividades.</p>
-            </div>
-            <div id="turmas-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
-        </section>
+<!-- ============ TOC ============ -->
+<div class="wrap">
+  <nav class="toc reveal">
+    <h2>📑 O que você vai aprender</h2>
+    <ol>
+      <li><a href="#a1"><span class="n">1</span><span>Por que você <b>precisa</b> de um site</span></a></li>
+      <li><a href="#a2"><span class="n">2</span><span>Site × Landing Page: a diferença</span></a></li>
+      <li><a href="#a3"><span class="n">3</span><span>As 4 metas de uma landing page</span></a></li>
+      <li><a href="#a4"><span class="n">4</span><span>Anatomia da página que converte</span></a></li>
+      <li><a href="#a5"><span class="n">5</span><span>Benchmark imbatível</span></a></li>
+      <li><a href="#a6"><span class="n">6</span><span>Crie sua página com IA (passo a passo)</span></a></li>
+      <li><a href="#a7"><span class="n">7</span><span>Tudo é marketing</span></a></li>
+      <li><a href="#final"><span class="n">★</span><span>Checklist, glossário e atividades</span></a></li>
+    </ol>
+  </nav>
+</div>
 
-        <section id="screen-playlist" class="hidden space-y-6">
-            <button onclick="showScreen('home')" class="text-indigo-400 hover:underline flex items-center gap-2 mb-2">
-                <i class="fa-solid fa-arrow-left"></i> Voltar para turmas
-            </button>
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <span class="text-xs font-bold uppercase bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded-md">ATIVIDADES DISPONÍVEIS</span>
-                <h2 id="playlist-turma-title" class="text-2xl font-bold text-white mt-2">Turma</h2>
-                <p class="text-gray-400 text-sm mt-1">Selecione uma das faixas abaixo para iniciar o treino.</p>
-            </div>
-            
-            <div id="playlist-container" class="grid grid-cols-1 gap-3"></div>
-        </section>
+<main class="wrap">
 
-        <section id="screen-turma" class="hidden space-y-6">
-            <button onclick="showScreen('playlist')" class="text-indigo-400 hover:underline flex items-center gap-2 mb-2">
-                <i class="fa-solid fa-chevron-left"></i> Mudar de música
-            </button>
-            
-            <div class="bg-gradient-to-r from-gray-800 to-indigo-950 p-5 rounded-xl border border-gray-700 shadow-md">
-                <p class="text-xs text-indigo-300 uppercase font-extrabold tracking-widest mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Contexto da Canção</p>
-                <h2 id="music-context-title" class="text-xl font-bold text-white">Título da Música</h2>
-                <p id="music-context-desc" class="text-sm text-gray-300 mt-2 leading-relaxed">Contexto descritivo pedagógico.</p>
-            </div>
+<!-- ============ AULA 1 ============ -->
+<section class="aula" id="a1">
+  <span class="eyebrow"><span class="chip">1</span> Aula 1</span>
+  <h2>Por que você precisa de um site 🏠</h2>
+  <p class="aula-sub">A regra de ouro do marketing digital: <b>quem não tem site não existe na internet — e quem não existe, não vende.</b></p>
 
-            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 shadow-2xl flex flex-col sm:flex-row items-center gap-4 w-full">
-                <div class="flex items-center gap-4 w-full sm:w-auto flex-grow">
-                    <div id="disc-icon" class="bg-indigo-600/20 p-4 rounded-xl text-indigo-400">
-                        <i class="fa-solid fa-compact-disc text-3xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-indigo-400 font-bold uppercase tracking-wider">Apoio de Áudio:</p>
-                        <p id="audio-file-name" class="text-base font-bold text-white">arquivo.mp3</p>
-                    </div>
-                </div>
-                <audio id="audio-player" controls class="w-full sm:w-72 h-10 accent-indigo-500">
-                    <source id="audio-source" src="" type="audio/mpeg">
-                </audio>
-            </div>
+  <div class="call fact"><span class="ic">📱</span>
+    <h4>A atenção está na internet</h4>
+    Repare nas pessoas no ônibus, na fila do banco, no parquinho — todo mundo de cabeça baixa, no celular. A atenção das pessoas migrou pra tela. <b>Quem aparece onde está a atenção, vende mais.</b> Estar na internet deixou de ser opção: é onde o cliente já está te procurando.</div>
 
-            <div class="flex border-b border-gray-700">
-                <button id="tab-btn-pronuncia" onclick="switchTab('pronuncia')" class="flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition">
-                    <i class="fa-solid fa-microphone-lines mr-2"></i>Letra Completa & Pronúncia
-                </button>
-                <button id="tab-btn-significado" onclick="switchTab('significado')" class="flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition">
-                    <i class="fa-solid fa-language mr-2"></i>Tradução & Super Dicionário
-                </button>
-            </div>
+  <div class="block">
+    <h3><span class="em">🔑</span>Um site é a sua casa própria</h3>
+    <p>Instagram, TikTok e YouTube são casas <b>alugadas</b>. O perfil é da Meta; o canal é do Google. Se a plataforma decidir te bloquear amanhã, você perde tudo. O site é a única coisa que é <b>realmente sua</b>.</p>
+    <ul class="ticks">
+      <li>Você é o dono e faz o que quiser com ele.</li>
+      <li>Coleta dados e inteligência que nenhuma rede social te entrega.</li>
+      <li>Vende no automático, até enquanto você dorme ou está de férias.</li>
+      <li>Alimenta o <b>Pixel da Meta</b> e a <b>Tag do Google</b> com quem visitou — e isso traz mais clientes.</li>
+    </ul>
+  </div>
 
-            <div class="bg-gray-800/40 border border-gray-700 rounded-xl p-6 min-h-[400px]">
-                <div id="tab-content-pronuncia" class="space-y-4">
-                    <p class="text-xs text-gray-400 border-b border-gray-700 pb-2 italic">Dê o play no áudio acima e utilize o encarte abaixo para acompanhar a pronúncia fonética no seu próprio tempo.</p>
-                    <div id="lyrics-render-target" class="lyrics-container space-y-6 text-[17px] tracking-wide max-h-[500px] overflow-y-auto pr-2 pt-2 text-gray-100"></div>
-                </div>
+  <div class="grid g2">
+    <div class="card">
+      <span class="ico">🔎</span>
+      <h4>Aparece no Google</h4>
+      <p>Com um site, você surge gratuitamente nas buscas — e agora também nas respostas da inteligência artificial (ChatGPT, Gemini e afins).</p>
+    </div>
+    <div class="card">
+      <span class="ico">🛡️</span>
+      <h4>Passa credibilidade</h4>
+      <p>Entre uma loja só com Instagram e outra com site bonito, fotos e CNPJ, qual passa mais confiança? O site coloca você na frente de quem não tem.</p>
+    </div>
+  </div>
 
-                <div id="tab-content-significado" class="hidden space-y-6">
-                    <div id="dictionary-render-target"></div>
-                </div>
-            </div>
-        </section>
+  <div class="call warn"><span class="ic">🚫</span>
+    <h4>Pare de reclamar que "não consigo vender"</h4>
+    Um aluno dizia que não conseguia vender. No perfil dele não havia nem um link pra comprar! <b>Se você não tem um botão pra eu clicar e comprar, o problema não é o mercado — é a falta de uma página de vendas.</b></div>
+</section>
 
-        <section id="screen-admin" class="hidden space-y-6">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-gear text-indigo-400"></i> Painel de Controle
-                </h2>
-                <button onclick="showScreen('home')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                    Visualizar App
-                </button>
-            </div>
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 space-y-4">
-                <h3 class="text-lg font-medium text-gray-200">Cadastrar Nova Turma</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input type="text" id="new-turma-name" placeholder="Ex: Turma - IQ19/0004" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white">
-                    <input type="text" id="new-turma-pass" placeholder="Definir Senha do Aluno" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white">
-                </div>
-                <button onclick="addTurmaComSenha()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-lg font-semibold transition">Salvar Turma</button>
-            </div>
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h3 class="text-lg font-medium text-gray-200 mb-4">Gerenciamento de Chaves Cadastradas</h3>
-                <ul id="admin-turmas-list" class="divide-y divide-gray-700"></ul>
-            </div>
-        </section>
-    </main>
+<hr class="div">
 
-    <footer class="bg-gray-900 text-center py-6 text-xs text-gray-600 border-t border-gray-800">
-        EduMusic &copy; 2026 - Plataforma de Apoio Pedagógico Estilo App
-    </footer>
+<!-- ============ AULA 2 ============ -->
+<section class="aula" id="a2">
+  <span class="eyebrow"><span class="chip">2</span> Aula 2</span>
+  <h2>Site × Landing Page: entenda a diferença 🆚</h2>
+  <p class="aula-sub">Os dois servem pra vender, mas têm funções diferentes. Saber qual usar muda o seu resultado.</p>
 
-    <script>
-        const musicData = {
-            animals: {
-                title: "Animals (Like Animals)",
-                artist: "BTS",
-                file: "animals.mp3",
-                contextTitle: "Animals (Like Animals) — BTS",
-                contextDesc: "Interpretada inteiramente em inglês, Animals usa metáforas selvagens para abordar autenticidade e liberdade emocional. Ideal para trabalhar Connected Speech, reduções cotidianas e vocabulários de natureza e sentimentos profundos.",
-                lyrics: [
-                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
-                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
-                    { eng: "Oh-oh-oh", fon: "/ óu - óu - óu /" },
-                    { eng: "Oh-oh-oh-oh", fon: "/ óu - óu - óu - óu /" },
-                    { eng: "Take me into your deep", fon: "/ teik mí íntu iór díp /" },
-                    { eng: "I wanna lay in your world", fon: "/ ái uána léi in iór uórld /" },
-                    { eng: "So what, your shadow's a mess", fon: "/ só uát, iór xédous a més /" },
-                    { eng: "I'm walkin' with my own dirt", fon: "/ áim uókin uíð mái óun dârt /" },
-                    { eng: "We can go all night", fon: "/ uí kén góu ól náit /" },
-                    { eng: "Don't you close your eyes", fon: "/ dónt iú klóuz iór áiz /" },
-                    { eng: "Don't you fear the light", fon: "/ dónt iú fír ðá láit /" },
-                    { eng: "All night", fon: "/ ól náit /" },
-                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
-                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
-                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
-                    { eng: "('Live, your, heart is full)", fon: "/ tíl iór hárt íz fúl /" },
-                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
-                    { eng: "(You, can, have it all, oh)", fon: "/ iú kén hév ít ól óu /" },
-                    { eng: "Six feet down in the sand", fon: "/ síks fít dáun ín ðá sênd /" },
-                    { eng: "There's creatures that made a hole", fon: "/ ðérz krítchârz ðét méid a hóul /" },
-                    { eng: "Do speak, I'm begging you, please", fon: "/ dú spík, áim bégin iú, plíz /" },
-                    { eng: "There's beauty outside control (Outside)", fon: "/ ðérz biúti áutsáid kôntróul /" },
-                    { eng: "Oh, we can go all night (Go all night)", fon: "/ óu, uí kén góu ól náit /" },
-                    { eng: "We can go all night (We can go all night)", fon: "/ uí kén góu ól náit /" },
-                    { eng: "Yeah, we should go all night", fon: "/ ié, uí xúd góu ól náit /" },
-                    { eng: "All night", fon: "/ ól náit /" },
-                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
-                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
-                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
-                    { eng: "('Til, your, heart is full)", fon: "/ tíl iór hárt íz fúl /" },
-                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
-                    { eng: "(You, can, have it all, oh)", fon: "/ iú kén hév ít ól óu /" },
-                    { eng: "Got you in the wild", fon: "/ gót iú ín ðá uáild /" },
-                    { eng: "Somewhere so far", fon: "/ sâm-uér só fár /" },
-                    { eng: "With your claws sharp", font: "/ uíð iór klós xárp /" },
-                    { eng: "And them fangs out", font: "/ énd ðém fêngs áut /" },
-                    { eng: "Now you see a whole land full of animals", fon: "/ náu iú sí a hóul lênd fúl óv énimaulz /" },
-                    { eng: "None of us are tameable", fon: "/ nân óv ás ár téimabl /" },
-                    { eng: "None of us are tameable", fon: "/ nân óv ás ár téimabl /" },
-                    { eng: "(Oh-oh-oh!)", fon: "/ óu óu óu /" },
-                    { eng: "Heart! (Oh-oh-oh!)", fon: "/ hárt! óu óu óu /" },
-                    { eng: "Untameable", fon: "/ án-téimabl /" },
-                    { eng: "(Oh-oh-oh!) Go (Take it all)", fon: "/ óu óu óu góu teik ít ól /" },
-                    { eng: "And take it all", fon: "/ énd teik ít ól /" },
-                    { eng: "If you wanna be animals", fon: "/ íf iú uána bí énimaulz /" },
-                    { eng: "Baby, we can be animals", fon: "/ béibi uí kén bí énimaulz /" },
-                    { eng: "Eat this life 'til your heart is full", fon: "/ ít ðís láif tíl iór hárt íz fúl /" },
-                    { eng: "(Heart, is 'Til my heart)", fon: "/ hárt íz tíl mái hárt /" },
-                    { eng: "If you want, you can have it all", fon: "/ íf iú uánt, iú kén hév ít ól /" },
-                    { eng: "(Take it all, oh)", fon: "/ teik ít ól óu /" }
-                ],
-                translation: [
-                    "Oh, oh, oh / Oh, oh, oh / Oh, oh, oh / Oh, oh, oh, oh", "Me leve para o seu lugar profundo, eu quero me deitar no seu mundo", "E daí se a sua sombra é uma bagunça? Eu estou caminhando com minhas próprias imperfeições", "Nós podemos ir a noite toda, não feche os seus olhos de jeito nenhum", "Não tenha medo da luz, a noite toda", "Se você quer ser selvagem, querido, nós podemos ser selvagens", "Devore essa vida até o seu coração ficar totalmente cheio", "Se você quiser, você pode ter tudo isso", "A seis pés de profundidade na areia, há criaturas que fizeram um buraco", "Fale sim, eu estou te implorando, por favor, há beleza fora do controle", "Oh, nós podemos ir a noite toda...", "Peguei você na selva, em algum lugar tão distante", "Com as suas garras afiadas e aquelas presas para fora", "Agora você vê uma terra inteira cheia de animais", "Nenhum de nós é domesticável, nenhum de nós é domesticável", "Coração! Indomável!", "Vá (pegue tudo) e pegue tudo", "Se você quer ser selvagem, querido, nós podemos ser selvagens", "Devore essa vida até o seu coração ficar cheio", "Se você quiser, você pode ter tudo"
-                ],
-                dictionary: [
-                    { word: "Wanna (Want to)", cat: "Contração Informal", desc: "A união de 'want' + 'to'. Usada para expressar desejo rápido e natural na fala fluida." },
-                    { word: "Into your deep", cat: "Expressão Poética", desc: "Para o seu profundo / sua intimidade. Indica mergulhar em sentimentos íntimos." },
-                    { word: "Lay (Lay down)", cat: "Verbo de Ação", desc: "Deitar-se ou repousar. Aqui expressa entrega emocional e conforto em um espaço seguro." },
-                    { word: "Shadow's a mess", cat: "Metáfora Psicológica", desc: "Literalmente 'a sombra é uma bagunça'. Refere-se aos lados obscuros e imperfeitos de alguém." },
-                    { word: "Own dirt", cat: "Vocabulário Figurado", desc: "'Minha própria sujeira'. Representa falhas pessoais, passados complicados ou defeitos aceitos." },
-                    { word: "Don't you close", cat: "Estrutura de Ênfase", desc: "O acréscimo do pronome 'you' em imperativos negativos serve para dar ordem firme e direta." },
-                    { word: "Six feet down", cat: "Expressão Cultural", desc: "Significa enterrado fundo, baseado na medida clássica tradicional dos EUA para covas." },
-                    { word: "Do speak", cat: "Gramática de Ênfase", desc: "O uso de 'Do' antes do verbo na afirmativa serve para enfatizar. Significa 'Fale sim!' ou 'Fale mesmo!'." },
-                    { word: "Outside control", cat: "Conceito Abstrato", desc: "Fora do controle padrão. Celebra o que é selvagem, imprevisível e natural." },
-                    { word: "Claws & Fangs", cat: "Substantivos da Natureza", desc: "Garras (claws) e presas afiadas (fangs) típicas de animais selvagens e predadores." },
-                    { word: "Tameable", cat: "Sufixo Adjetival", desc: "Domesticável. O sufixo '-able' indica capacidade/possibilidade de ser controlado." },
-                    { word: "Untameable", cat: "Prefixo de Negação", desc: "Indomável. O prefixo 'un-' inverte o significado de tameable, indicando espírito livre." }
-                ]
-            },
-            slave: {
-                title: "I Wanna Be Your Slave",
-                artist: "Måneskin",
-                file: "slave.mp3",
-                contextTitle: "I Wanna Be Your Slave — Måneskin",
-                contextDesc: "Lançada pela banda italiana Måneskin, esta faixa explora as dualidades dos relacionamentos através de contrastes marcantes. É excelente para ensinar oposições e gírias urbanas.",
-                lyrics: [
-                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
-                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" },
-                    { eng: "I wanna make your heartbeat", fon: "/ ái uána meik iór hárt-bít /" },
-                    { eng: "Run like rollercoasters", fon: "/ rân láik rólêrkóstêrz /" },
-                    { eng: "I wanna be a good boy", fon: "/ ái uána bí a gúd bói /" },
-                    { eng: "I wanna be a gangster", fon: "/ ái uána bí a gêngstêr /" },
-                    { eng: "'Cause you can be the beauty", fon: "/ kóz iú kén bí ðá biúti /" },
-                    { eng: "And I could be the monster", fon: "/ énd ái kúd bí ðá mónstêr /" },
-                    { eng: "I love you since this morning", fon: "/ ái láv iú síns ðís mórnin /" },
-                    { eng: "Not just for aesthetic", fon: "/ nót djást fór és-ðétik /" },
-                    { eng: "I wanna touch your body", fon: "/ ái uána tátch iór bódi /" },
-                    { eng: "So fucking electric", fon: "/ só fákin ilétrik /" },
-                    { eng: "I know you scared of me", fon: "/ ái nóu iú skérd óv mí /" },
-                    { eng: "You said that I'm too eccentric", fon: "/ iú séd ðét áim tú ikséntrik /" },
-                    { eng: "I'm crying all my tears", fon: "/ áim krái-in ól mái tírz /" },
-                    { eng: "And that's fucking pathetic", fon: "/ énd ðéts fákin pá-ðétik /" },
-                    { eng: "I wanna make you hungry", fon: "/ ái uána meik iú hângri /" },
-                    { eng: "Then I wanna feed ya", font: "/ ðén ái uána fíd iá /" },
-                    { eng: "I wanna paint your face", fon: "/ ái uána péint iór féis /" },
-                    { eng: "Like you're my Mona Lisa", fon: "/ láik iúr mái móna líza /" },
-                    { eng: "I wanna be a champion", fon: "/ ái uána bí a tchêmpiôn /" },
-                    { eng: "I wanna be a loser", fon: "/ ái uána bí a lúzêr /" },
-                    { eng: "I'll even be a clown", fon: "/ áil íven bí a kláun /" },
-                    { eng: "'Cause I just wanna amuse ya", fon: "/ kóz ái djást uána amiúz iá /" },
-                    { eng: "I wanna be your sex toy", fon: "/ ái uána bí iór séks tói /" },
-                    { eng: "I wanna be your teacher", fon: "/ ái uána bí iór títchêr /" },
-                    { eng: "I wanna be your sin", fon: "/ ái uána bí iór sín /" },
-                    { eng: "I wanna be a preacher", fon: "/ ái uána bí a prítchêr /" },
-                    { eng: "I wanna make you love me", fon: "/ ái uána meik iú láv mí /" },
-                    { eng: "Then I wanna leave ya", fon: "/ ðén ái uána lív iá /" },
-                    { eng: "'Cause baby I'm your David", fon: "/ kóz béibi áim iór déivid /" },
-                    { eng: "And you're my Goliath", fon: "/ énd iúr mái goláiað /" },
-                    { eng: "Because I'm the devil who's searching for redemption", fon: "/ bikóz áim ðá dévil húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a lawyer who's searching for redemption", fon: "/ énd áim a lói-êr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a killer who's searching for redemption", fon: "/ énd áim a kílêr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a bad guy who's searching for redemption", fon: "/ énd áim a béd gái húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a blond girl who's searching for redemption", fon: "/ énd áim a blónd gârl húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a freak that is searching for redemption", fon: "/ énd áim a frík ðét íz sêrtchin fór ridêmpxôn /" },
-                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
-                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" },
-                    { eng: "I wanna make your heart beat", fon: "/ ái uána meik iór hért bít /" },
-                    { eng: "Run like rollercoasters", fon: "/ rân láik rólêrkóstêrz /" },
-                    { eng: "I wanna be a good boy", fon: "/ ái uána bí a gúd bói /" },
-                    { eng: "I wanna be a gangster", fon: "/ ái uána bí a gêngstêr /" },
-                    { eng: "'Cause you can be the beauty", fon: "/ kóz iú kén bí ðá biúti /" },
-                    { eng: "And I could be the monster", fon: "/ énd ái kúd bí ðá mónstêr /" },
-                    { eng: "I wanna make you quiet", fon: "/ ái uána meik iú kuáiet /" },
-                    { eng: "I wanna make you nervous", fon: "/ ái uána meik iú nêrvôs /" },
-                    { eng: "I wanna set you free", fon: "/ ái uána sét iú frí /" },
-                    { eng: "But I'm too fucking jealous", fon: "/ bót áim tú fákin djélôs /" },
-                    { eng: "I wanna pull your strings", fon: "/ ái uána púl iór stríngz /" },
-                    { eng: "Like you're my telecaster", fon: "/ láik iúr mái t̂elikâstêr /" },
-                    { eng: "And if you want to use me", font: "/ énd íf iú uánt tu iúz mí /" },
-                    { eng: "I could be your puppet", font: "/ ái kúd bí iór pápet /" },
-                    { eng: "'Cause I'm the devil who's searching for redemption", fon: "/ kóz áim ðá dévil húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a lawyer who's searching for redemption", fon: "/ énd áim a lói-êr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "And I'm a killer who's searching for redemption", fon: "/ énd áim a kílêr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "I'm a motherfucking monster who's searching for redemption", fon: "/ áim a máðârfákin mónstêr húz sêrtchin fór ridêmpxôn /" },
-                    { eng: "I wanna be your slave", fon: "/ ái uána bí iór sléiv /" },
-                    { eng: "I wanna be your master", fon: "/ ái uána bí iór mâstêr /" }
-                ],
-                translation: [
-                    "Eu quero ser seu escravo, eu quero ser seu mestre", "Eu quero fazer seu coração correr como montanhas-russas", "Eu quero ser um bom menino, eu quero ser um gângster", "Porque você pode ser a bela e eu poderia ser o monstro", "Eu te amo desde hoje de manhã, não apenas por estética", "Eu quero tocar o seu corpo, tão elétrico", "Eu sei que você tem medo de mim, você disse que sou excêntrico demais", "Estou chorando todas as minhas lágrimas e isso é patético demais", "Eu quero te deixar com fome, e depois eu quero te alimentar", "Eu quero pintar o seu rosto como se você fosse minha Mona Lisa", "Eu quero ser um campeão, eu quero ser um perdedor", "Eu vou até ser um palhaço porque eu só quero te entreter", "Eu quero ser seu brinquedo, eu quero ser seu professor", "Eu quero ser seu pecado, eu quero ser um pregador", "Eu quero fazer você me amar, e depois eu quero te deixar", "Porque, querida, eu sou o seu Davi e você é o meu Golias", "Porque eu sou o demônio que está procurando por redemption/redenção", "E eu sou um advogado que está procurando por redenção", "E eu sou um assassino que está procurando por redenção", "Eu sou um monstro maldito que está procurando por redenção", "E eu sou um cara mau que está procurando por redenção", "E eu sou uma garota loira que está procurando por redenção", "E eu sou um esquisito que está procurando por redenção", "Eu sou um monstro maldito que está procurando por redenção", "Eu quero ser seu escravo, eu quero ser seu mestre", "Eu quero fazer seu coração correr como montanhas-russas", "Eu quero ser um bom menino, eu quero ser um gângster", "Porque você pode ser a bela e eu poderia ser o monstro", "Eu quero te deixar quieta, eu quero te deixar nervosa", "Eu quero te libertar, mas sou ciumento demais", "Eu quero controlar os seus cordões como se você fosse minha guitarra Telecaster", "E se você quiser me usar, eu poderia ser o seu fantoche", "Arrependimento/Redenção nos versos finais...", "Eu quero ser seu escravo, eu quero ser seu mestre"
-                ],
-                dictionary: [
-                    { word: "Rollercoasters", cat: "Vocabulário", desc: "Montanhas-russas. Simboliza uma mistura extrema de adrenalina, picos e quedas emocionais." },
-                    { word: "Aesthetic", cat: "Substantivo / Adjetivo", desc: "Estética / Aparência visual. Indica que o sentimento vai além do superficial." },
-                    { word: "Eccentric", cat: "Adjetivo de Caráter", desc: "Excêntrico, extravagante, peculiar. Alguém que age fora do padrão social comum." },
-                    { word: "Pathetic", cat: "Adjetivo Forte", desc: "Patético, lamentável. Expressa uma autocrítica severa sobre demonstrar fraqueza." },
-                    { word: "Feed ya (Feed you)", cat: "Gíria / Redução", desc: "Alimentar você. O 'ya' substitui 'you' de forma rítmica na música e fala informal." },
-                    { word: "Amuse ya", cat: "Verbo de Ação", desc: "Entreter você / Fazer você sorrir ou se distrair. Mostrar-se disposto a agradar." },
-                    { word: "Preacher", cat: "Profissão / Vocabulário", desc: "Pregador / Pastor. Usado em oposição direta à palavra 'sin' (pecado) na estrofe." },
-                    { word: "David & Goliath", cat: "Alusão Cultural", desc: "Davi e Golias. Clássica metáfora sobre uma dinâmica de forças muito desigual." },
-                    { word: "Redemption", cat: "Substantivo Abstrato", desc: "Redenção, salvação ou absolvição de falhas morais cometidas no passado." },
-                    { word: "Jealous", cat: "Sentimento", desc: "Cumento, invejoso. Descreve a posse exagerada mencionada no verso." },
-                    { word: "Pull your strings", cat: "Expressão Idiomática", desc: "Manipular alguém por trás dos panos, controlando as ações da pessoa como um fantoche." },
-                    { word: "Puppet", cat: "Substantivo", desc: "Marionete ou fantoche. Alguém totalmente vulnerável ao controle de terceiros." }
-                ]
-            }
-        };
+  <div class="vs">
+    <div class="head a">🌐 Site</div>
+    <div class="head b">🎯 Landing Page</div>
+    <div class="col a">
+      <ul>
+        <li>Tem <b>várias páginas</b> da empresa.</li>
+        <li>Quem somos, produtos, contato, blog…</li>
+        <li>Mostra todo o universo do negócio.</li>
+        <li>É a "vitrine completa" da marca.</li>
+      </ul>
+    </div>
+    <div class="col b">
+      <ul>
+        <li>É <b>uma página só</b>, com um link.</li>
+        <li>Focada em <b>um produto ou serviço</b>.</li>
+        <li>Funciona como um vendedor.</li>
+        <li>Feita sob medida pro <b>tráfego pago</b>.</li>
+      </ul>
+    </div>
+  </div>
 
-        const defaultTurmasConfig = [
-            { name: "Turma - IQ19/0004", pass: "iq1904", musics: ["animals", "slave"] },
-            { name: "Turma Teste", pass: "teste123", musics: ["animals"] },
-            { name: "Turma - IQ15/0003", pass: "1234", musics: ["animals"] },
-            { name: "Turma - IQ19/0013", pass: "1234", musics: ["animals"] },
-            { name: "Turma - IQ19/007", pass: "1234", musics: ["animals"] },
-            { name: "Turma - IS08/0008", pass: "1234", musics: ["animals"] }
-        ];
+  <div class="call tip"><span class="ic">💡</span>
+    <h4>Mantra nº 1: uma página, um objetivo</h4>
+    Toda landing page precisa ter <b>uma única meta</b>. Nada de espalhar links de rede social, vários botões e mil opções. A pessoa que chega só pode fazer três coisas: <b>virar lead, comprar ou sair.</b> Mais opção = menos conversão. <b>Menos é mais.</b></div>
 
-        let database = JSON.parse(localStorage.getItem('edu_db')) || defaultTurmasConfig;
-        let currentActiveTurma = null;
+  <p>👉 E o tráfego pago <b>nunca</b> deve ser enviado para a página inicial (home) do site. Ele vai sempre para uma landing page preparada para converter.</p>
+</section>
 
-        const audioPlayer = document.getElementById('audio-player');
-        const discIcon = document.getElementById('disc-icon');
+<hr class="div">
 
-        audioPlayer.addEventListener('play', () => discIcon.classList.add('animate-spin'));
-        audioPlayer.addEventListener('pause', () => discIcon.classList.remove('animate-spin'));
+<!-- ============ AULA 3 ============ -->
+<section class="aula" id="a3">
+  <span class="eyebrow"><span class="chip">3</span> Aula 3</span>
+  <h2>As 4 metas de uma landing page 🎯</h2>
+  <p class="aula-sub">Antes de escrever qualquer texto, defina <b>uma</b> meta. Toda a página vai existir só para alcançá-la. Escolha apenas uma.</p>
 
-        function showScreen(screenId) {
-            document.getElementById('screen-home').classList.add('hidden');
-            document.getElementById('screen-playlist').classList.add('hidden');
-            document.getElementById('screen-turma').classList.add('hidden');
-            document.getElementById('screen-admin').classList.add('hidden');
-            document.getElementById(`screen-${screenId}`).classList.remove('hidden');
-            
-            if (screenId !== 'turma' && audioPlayer) audioPlayer.pause();
-            if (screenId === 'home' || screenId === 'admin') renderApp();
-        }
+  <div class="grid g4">
+    <div class="card">
+      <span class="meta-num">META 01</span>
+      <span class="ico">🛒</span>
+      <h4>Venda direta</h4>
+      <p>O cliente compra na hora, dentro do site, sem falar com ninguém. Típico de e-commerce.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 02</span>
+      <span class="ico">💬</span>
+      <h4>Lead no WhatsApp</h4>
+      <p>Um botão "Fale comigo" leva pro WhatsApp. Ótimo pra serviços e atendimento próximo.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 03</span>
+      <span class="ico">📧</span>
+      <h4>Lead por e-mail</h4>
+      <p>A pessoa cadastra o e-mail. Ideal pra captar muito volume e enviar novidades depois.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 04</span>
+      <span class="ico">📝</span>
+      <h4>Lead qualificado</h4>
+      <p>Formulário com nome, e-mail e perguntas (ex.: faturamento). Você só fala com quem tem perfil.</p>
+    </div>
+  </div>
 
-        function renderApp() {
-            const grid = document.getElementById('turmas-grid');
-            const adminList = document.getElementById('admin-turmas-list');
-            grid.innerHTML = '';
-            adminList.innerHTML = '';
+  <div class="call do"><span class="ic">✍️</span>
+    <h4>Atividade — defina a sua meta</h4>
+    Pense no seu produto ou serviço principal e responda: <b>qual das 4 metas faz mais sentido pra ele agora?</b> Escreva em uma frase. Essa decisão vai guiar todo o resto do e-book.</div>
+</section>
 
-            database.forEach((item, index) => {
-                const isTarget = item.name.includes("IQ19/0004");
-                const card = document.createElement('div');
-                card.className = `border p-6 rounded-xl cursor-pointer transition transform hover:-translate-y-1 shadow-lg flex flex-col justify-between group ${isTarget ? 'bg-indigo-950/40 border-indigo-500/50 hover:bg-indigo-900/50' : 'bg-gray-800 border-gray-700 hover:border-gray-500'}`;
-                card.onclick = () => verifyAccess(item);
-                card.innerHTML = `
-                    <div class="flex items-start justify-between">
-                        <div class="p-3 rounded-lg bg-gray-700 text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition">
-                            <i class="fa-solid fa-graduation-cap text-xl"></i>
-                        </div>
-                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-900 text-gray-400 border border-gray-700">Protegida</span>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mt-4">${item.name}</h3>
-                `;
-                grid.appendChild(card);
+<hr class="div">
 
-                const li = document.createElement('li');
-                li.className = "py-3 flex justify-between items-center";
-                li.innerHTML = `
-                    <div>
-                        <span class="text-gray-200 font-medium block">${item.name}</span>
-                        <span class="text-xs text-gray-500 font-mono">Chave: <span class="text-emerald-400 font-bold">${item.pass}</span></span>
-                    </div>
-                    <button onclick="deleteTurma(${index})" class="text-red-400 hover:text-red-300 p-2 transition"><i class="fa-solid fa-trash-can"></i></button>
-                `;
-                adminList.appendChild(li);
-            });
-        }
+<!-- ============ AULA 4 ============ -->
+<section class="aula" id="a4">
+  <span class="eyebrow"><span class="chip">4</span> Aula 4</span>
+  <h2>Anatomia da página que converte 🧠</h2>
+  <p class="aula-sub">Uma landing page que vende tem um "corpo perfeito": <b>cabeça, corpo e pés</b>. Você pode errar nos pés e no corpo… mas <b>nunca</b> na cabeça.</p>
 
-        function verifyAccess(item) {
-            const typedPassword = prompt(`Digite a senha da [ ${item.name} ] para entrar:`);
-            if (typedPassword === null) return;
-            
-            if (typedPassword === item.pass) {
-                currentActiveTurma = item;
-                document.getElementById('playlist-turma-title').innerText = item.name;
-                
-                const pContainer = document.getElementById('playlist-container');
-                pContainer.innerHTML = "";
-                
-                const mList = item.musics || ["animals"];
-                mList.forEach((mKey) => {
-                    const mInfo = musicData[mKey];
-                    const card = document.createElement('div');
-                    card.className = "bg-gray-800 hover:bg-gray-750 border border-gray-700 hover:border-indigo-500 p-5 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-lg";
-                    card.onclick = () => openMusic(mKey);
-                    card.innerHTML = `
-                        <div class="flex items-center gap-4">
-                            <div class="bg-indigo-600/10 text-indigo-400 p-3.5 rounded-xl group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-play text-xl pl-0.5"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">${mInfo.title}</h3>
-                                <p class="text-sm text-gray-400">${mInfo.artist}</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-semibold bg-gray-700 text-gray-300 px-3 py-1 rounded-full group-hover:bg-indigo-950 group-hover:text-indigo-300 transition">Iniciar Atividade</span>
-                    `;
-                    pContainer.appendChild(card);
-                });
-                
-                showScreen('playlist');
-            } else {
-                alert("❌ Senha incorreta!");
-            }
-        }
+  <div class="figure">
+    <svg viewBox="0 0 360 470" role="img" aria-label="Diagrama da anatomia de uma landing page dividida em cabeça, corpo e pés">
+      <!-- phone frame -->
+      <rect x="60" y="12" width="240" height="446" rx="28" fill="#0a3a2d" stroke="#1c8a6b" stroke-width="2"/>
+      <rect x="72" y="26" width="216" height="418" rx="18" fill="#ffffff"/>
+      <!-- CABEÇA -->
+      <rect x="72" y="26" width="216" height="150" rx="18" fill="#E3F1EC"/>
+      <rect x="72" y="158" width="216" height="18" fill="#E3F1EC"/>
+      <rect x="92" y="50" width="176" height="14" rx="5" fill="#0E6B53"/>
+      <rect x="92" y="70" width="140" height="9" rx="4" fill="#9bbcb1"/>
+      <rect x="92" y="84" width="120" height="9" rx="4" fill="#9bbcb1"/>
+      <rect x="100" y="108" width="160" height="30" rx="9" fill="#FF5A3C"/>
+      <text x="180" y="128" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#fff">COMPRAR AGORA</text>
+      <text x="92" y="153" font-family="Inter" font-size="10" fill="#0E6B53">★★★★★ prova social</text>
+      <!-- CORPO -->
+      <rect x="92" y="196" width="80" height="9" rx="4" fill="#cdd8d3"/>
+      <rect x="92" y="214" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="226" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="238" width="140" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="262" width="80" height="54" rx="8" fill="#FBEFD8"/>
+      <rect x="188" y="262" width="80" height="54" rx="8" fill="#FBEFD8"/>
+      <rect x="92" y="330" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="342" width="150" height="7" rx="3" fill="#e3e9e6"/>
+      <!-- PÉS -->
+      <rect x="92" y="372" width="176" height="14" rx="5" fill="#cdd8d3"/>
+      <rect x="100" y="398" width="160" height="30" rx="9" fill="#FF5A3C"/>
+      <text x="180" y="418" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#fff">QUERO GARANTIR</text>
+      <!-- labels -->
+      <g font-family="Bricolage Grotesque" font-weight="800">
+        <text x="14" y="100" font-size="15" fill="#ffd98a">CABEÇA</text>
+        <text x="296" y="270" font-size="15" fill="#ffd98a" text-anchor="start">CORPO</text>
+        <text x="14" y="410" font-size="15" fill="#ffd98a">PÉS</text>
+      </g>
+      <line x1="14" y1="106" x2="58" y2="106" stroke="#ffd98a" stroke-width="1.5"/>
+      <line x1="302" y1="276" x2="302" y2="276" stroke="#ffd98a"/>
+      <line x1="14" y1="416" x2="58" y2="416" stroke="#ffd98a" stroke-width="1.5"/>
+    </svg>
+    <p class="figcap">🦴 Sem pernas ou braços dá pra viver. Sem cabeça, não. É na cabeça que está a conversão.</p>
+  </div>
 
-        function openMusic(musicKey) {
-            const data = musicData[musicKey];
-            
-            document.getElementById('music-context-title').innerText = data.contextTitle;
-            document.getElementById('music-context-desc').innerText = data.contextDesc;
-            document.getElementById('audio-file-name').innerText = data.file;
-            document.getElementById('audio-source').src = data.file;
-            audioPlayer.load();
+  <div class="passo">
+    <div class="num">🧠</div>
+    <div>
+      <h3>A CABEÇA — chamar a atenção (não pode errar!)</h3>
+      <p>É a parte de cima, que aparece <b>sem rolar a página</b>. Tem 3 pilares obrigatórios:</p>
+      <ul class="dots">
+        <li><b>Headline</b> 🎤 — a promessa forte. Ninguém compra o produto, compra a promessa. (Você não compra um hambúrguer, compra matar a fome com algo gostoso.)</li>
+        <li><b>Subheadline</b> 📝 — uma explicação rápida do que você vende.</li>
+        <li><b>Botão / CTA</b> 🔘 — um botão gigante e destacado, com cor diferente, que puxa o olhar.</li>
+      </ul>
+      <p style="margin-bottom:0">✨ Bônus que as gigantes usam: logo abaixo, uma <b>prova social</b> (avaliações, notas, ★★★★★). Amazon e Mercado Livre fazem isso.</p>
+    </div>
+  </div>
 
-            const lyricsTarget = document.getElementById('lyrics-render-target');
-            lyricsTarget.innerHTML = "";
-            data.lyrics.forEach((line) => {
-                const div = document.createElement('div');
-                div.className = "space-y-0.5 border-b border-gray-800/40 pb-2";
-                div.innerHTML = `
-                    <p class="text-white font-medium text-base">${line.eng}</p>
-                    <p class="text-sm text-indigo-300/80 font-mono">${line.fon}</p>
-                `;
-                lyricsTarget.appendChild(div);
-            });
+  <div class="passo">
+    <div class="num">💪</div>
+    <div>
+      <h3>O CORPO — convencer (persuasão)</h3>
+      <p>Aqui você usa elementos para provar que é o melhor:</p>
+      <ul class="dots">
+        <li>🎁 <b>Benefícios</b> — o que a pessoa ganha ao comprar.</li>
+        <li>⭐ <b>Prova social</b> — depoimentos reais de clientes.</li>
+        <li>📊 <b>Prova lógica</b> — resultados e números (ex.: "90% passa de primeira").</li>
+        <li>📸 <b>Desejo</b> — boas fotos e vídeos que criam vontade.</li>
+        <li>❓ <b>Quebra de objeções</b> — perguntas frequentes que matam as dúvidas.</li>
+      </ul>
+    </div>
+  </div>
 
-            const dictTarget = document.getElementById('dictionary-render-target');
-            let dictHTML = `<div><h3 class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-3">🗝️ Super Dicionário (${data.dictionary.length} Pontos de Ensino)</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
-            data.dictionary.forEach((item) => {
-                dictHTML += `
-                    <div class="p-3 bg-gray-800 rounded-lg border-l-4 border-indigo-500 space-y-1">
-                        <span class="font-bold text-white block">${item.word}</span>
-                        <span class="text-xs font-bold text-indigo-300">${item.cat}</span>
-                        <p class="text-sm text-gray-300">${item.desc}</p>
-                    </div>
-                `;
-            });
-            dictHTML += `</div></div><div class="border-t border-gray-700 pt-4"><h3 class="text-sm font-bold text-indigo-400 uppercase tracking-widest mb-3">📝 Tradução Completa</h3><div class="space-y-2 text-sm text-gray-300 font-sans max-h-[300px] overflow-y-auto pr-2">`;
-            data.translation.forEach((transLine) => {
-                dictHTML += `<p>${transLine}</p>`;
-            });
-            dictHTML += `</div></div>`;
-            dictTarget.innerHTML = dictHTML;
+  <div class="passo">
+    <div class="num">🦶</div>
+    <div>
+      <h3>OS PÉS — dar segurança e fechar</h3>
+      <p>Quem rolou até aqui está muito interessado. É a hora de tirar a última insegurança:</p>
+      <ul class="dots">
+        <li>✅ <b>Garantia</b> — reduz o risco da decisão.</li>
+        <li>⏳ <b>Escassez e urgência</b> — poucas vagas, oferta por tempo limitado.</li>
+        <li>👉 <b>Chamada final</b> — "compre agora e tenha acesso imediato".</li>
+      </ul>
+    </div>
+  </div>
 
-            showScreen('turma');
-            switchTab('pronuncia');
-        }
+  <div class="call fact"><span class="ic">📈</span>
+    <h4>O que é ROI?</h4>
+    Uma landing page de <b>alta conversão</b> é aquela que dá <b>ROI</b> (Retorno sobre o Investimento): você coloca um dinheiro e ele volta multiplicado — até de gente que nunca te conhecia (tráfego frio).</div>
 
-        function switchTab(tabId) {
-            const tabBtnPronuncia = document.getElementById('tab-btn-pronuncia');
-            const tabBtnSignificado = document.getElementById('tab-btn-significado');
-            const contentPronuncia = document.getElementById('tab-content-pronuncia');
-            const contentSignificado = document.getElementById('tab-content-significado');
+  <blockquote>
+    Regra de Pareto 🍞: em quase toda empresa, <b>80% do faturamento vem de uns poucos produtos</b>. Não crie uma página pra cada item — foque no seu "pão de padaria", o que vende com mais facilidade.
+    <cite>— Estratégia do menos é mais</cite>
+  </blockquote>
+</section>
 
-            if (tabId === 'pronuncia') {
-                contentPronuncia.classList.remove('hidden');
-                contentSignificado.classList.add('hidden');
-                tabBtnPronuncia.className = "flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition";
-                tabBtnSignificado.className = "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
-            } else {
-                contentPronuncia.classList.add('hidden');
-                contentSignificado.classList.remove('hidden');
-                tabBtnSignificado.className = "flex-1 py-3 text-center border-b-2 border-indigo-500 font-bold text-indigo-400 transition";
-                tabBtnPronuncia.className = "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
-            }
-        }
+<hr class="div">
 
-        function addTurmaComSenha() {
-            const nameInput = document.getElementById('new-turma-name');
-            const passInput = document.getElementById('new-turma-pass');
-            const name = nameInput.value.trim();
-            const pass = passInput.value.trim();
-            
-            if (name && pass) {
-                database.push({ name, pass, musics: ["animals"] });
-                localStorage.setItem('edu_db', JSON.stringify(database));
-                nameInput.value = '';
-                passInput.value = '';
-                renderApp();
-                alert(`Sucesso! A "${name}" foi adicionada.`);
-            }
-        }
+<!-- ============ AULA 5 ============ -->
+<section class="aula" id="a5">
+  <span class="eyebrow"><span class="chip">5</span> Aula 5</span>
+  <h2>Benchmark imbatível 🔭</h2>
+  <p class="aula-sub">"Não sou criativo" não é mais desculpa. Você não precisa inventar a roda — basta modelar quem já vende.</p>
 
-        function deleteTurma(index) {
-            if (confirm("Tem certeza que deseja apagar esta turma?")) {
-                database.splice(index, 1);
-                localStorage.setItem('edu_db', JSON.stringify(database));
-                renderApp();
-            }
-        }
+  <div class="passo">
+    <div class="num">1</div>
+    <div>
+      <h3>📷 Capture páginas que você admira</h3>
+      <p>Instale a extensão gratuita <b>GoFullPage</b> (procure por "GoFullPage Chrome Store"). Em qualquer landing page bonita, clique em "capturar página inteira" — ela vira uma imagem.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div>
+      <h3>🗂️ Monte uma "pasta de ideias"</h3>
+      <p>Salve essas imagens no computador. Toda vez que vir uma boa página, guarde ali. Vira o seu banco de inspirações.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div>
+      <h3>🤖 Entregue a referência pra IA</h3>
+      <p>Abra a IA, envie a imagem da página que funciona e peça: <i>"use a mesma estrutura desta landing page (headline, subheadline, seções) para criar a página do meu negócio: [descreva o seu negócio]"</i>. Em segundos você tem um rascunho completo.</p>
+    </div>
+  </div>
 
-        renderApp();
-    </script>
+  <div class="call tip"><span class="ic">💡</span>
+    <h4>Modele a estrutura, não copie o conteúdo</h4>
+    Aproveite o <b>esqueleto</b> que já converte e coloque os <b>seus</b> diferenciais, suas palavras e suas fotos. Inspiração não é cópia.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 6 ============ -->
+<section class="aula" id="a6">
+  <span class="eyebrow"><span class="chip">6</span> Aula 6</span>
+  <h2>Crie sua página com IA — passo a passo 🤖</h2>
+  <p class="aula-sub">Existem dois caminhos: o "modo antigo" (construtores) e o caminho com IA, muito mais rápido. Você só precisa clicar uns poucos botões.</p>
+
+  <h3 style="margin:8px 0 14px;font-size:20px">🏗️ Caminho A — Construtor (modo clássico)</h3>
+  <div class="passo">
+    <div class="num">1</div>
+    <div><h3>Tenha hospedagem + domínio</h3><p>Hospedar é "alugar" um espaço pro site (≈ R$ 15 a R$ 20/mês). Empresas como Hostinger e HostGator costumam dar o domínio (<i>suaempresa.com.br</i>) de graça no plano anual.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div><h3>Use um construtor visual</h3><p>No WordPress, ferramentas como o <b>Elementor</b> deixam você arrastar elementos (texto, botão, vídeo) e montar a página. Melhor ainda: comece por um <b>modelo pronto</b> e só troque os textos e fotos.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div><h3>Publique</h3><p>Inseriu o modelo, ajustou textos, colocou seu WhatsApp no botão → clique em <b>Publicar</b>. Pronto, a página está no ar.</p></div>
+  </div>
+
+  <h3 style="margin:26px 0 14px;font-size:20px">⚡ Caminho B — IA (modo rápido)</h3>
+  <div class="passo">
+    <div class="num">1</div>
+    <div><h3>Abra uma ferramenta de IA de sites</h3><p>Ex.: <b>Lovable</b>. Funciona como um "consultor" que cria a página a partir do que você descreve.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div><h3>Escreva um prompt simples e direto</h3>
+      <p>Diga o objetivo, o negócio e o estilo. Exemplo:</p>
+      <blockquote style="margin-top:6px">"Faça uma landing page para <b>tráfego pago</b> que leve as pessoas para o <b>WhatsApp</b>. É um <b>salão de beleza premium</b>. Use fundo preto e dourado."</blockquote>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div><h3>Responda as perguntas e gere</h3><p>A IA pode perguntar a direção de design e as cores. Escolha e deixe construir. Em poucos minutos a página aparece pronta pra ajustar.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">4</div>
+    <div><h3>Peça as tags e o pixel</h3><p>Escreva: <i>"instale a Tag do Google e o Pixel da Meta"</i>. A IA faz isso pra você — e a página fica pronta pra anunciar.</p></div>
+  </div>
+
+  <div class="call warn"><span class="ic">⚠️</span>
+    <h4>Deu erro? É normal</h4>
+    Às vezes a IA erra ou copia demais a referência. É só pedir pra <b>corrigir</b> ("analise os erros e ajuste") ou refazer o prompt. Faz parte do processo — não desista no primeiro tropeço.</div>
+
+  <div class="block">
+    <h3><span class="em">🧰</span>Ferramentas citadas</h3>
+    <ul class="dots">
+      <li><b>Landing pages / sites:</b> Elementor Pro + WordPress, Wix, Lovable.</li>
+      <li><b>Hospedagem:</b> Hostinger, HostGator.</li>
+      <li><b>E-commerce (loja):</b> Shopify, Loja Tray, Loja Integrada.</li>
+      <li><b>Captura de tela:</b> GoFullPage (extensão do Chrome).</li>
+    </ul>
+  </div>
+
+  <div class="call tip"><span class="ic">🎯</span>
+    <h4>A ferramenta não é o segredo — a estratégia é</h4>
+    "X é melhor que Y?" Não importa tanto. Se a estratégia estiver certa, qualquer ferramenta funciona. Para quem está começando, o mais barato e simples já resolve. <b>Se você não vende com o simples, não vai vender com o caro.</b></div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 7 ============ -->
+<section class="aula" id="a7">
+  <span class="eyebrow"><span class="chip">7</span> Aula 7</span>
+  <h2>Tudo é marketing 🍔</h2>
+  <p class="aula-sub">A foto, o vídeo, o texto, a promessa: tudo comunica. Mude a percepção e você muda as vendas.</p>
+
+  <div class="call fact"><span class="ic">🍔</span>
+    <h4>A lição do McDonald's</h4>
+    No anúncio, o lanche é lindo e perfeito (a <b>expectativa</b>). O que chega na bandeja é mais simples (a <b>realidade</b>). A foto vende. Por isso: prometa bem com a imagem — e depois entregue, de preferência <b>surpreendendo</b>.</div>
+
+  <div class="grid g2">
+    <div class="card">
+      <span class="ico">🏚️</span>
+      <h4>O problema não é o produto</h4>
+      <p>Um corretor dizia que "imóvel não vende na internet". As fotos é que eram ruins — escuras e quadriculadas. Ninguém compra o imóvel: compra a <b>foto</b> do imóvel.</p>
+    </div>
+    <div class="card">
+      <span class="ico">✨</span>
+      <h4>Resolva com IA</h4>
+      <p>Abra a janela, use uma luz simples e peça pra IA: <i>"melhore esta foto, deixe iluminada e bonita"</i>. Pronto — você cria desejo onde antes havia uma "prisão".</p>
+    </div>
+  </div>
+
+  <blockquote>
+    Lembre-se: tudo é promessa. Quando você melhora a foto, o vídeo e o texto, muda a percepção do cliente — e passa a usar o marketing a seu favor o tempo todo.
+  </blockquote>
+</section>
+
+<hr class="div">
+
+<!-- ============ FINAL ============ -->
+<section class="aula" id="final">
+  <span class="eyebrow"><span class="chip">★</span> Para fixar</span>
+  <h2>Checklist, glossário e atividades 🎓</h2>
+  <p class="aula-sub">Use estas ferramentas para revisar tudo e colocar a mão na massa.</p>
+
+  <h3 style="font-size:21px;margin-bottom:12px">✅ Checklist da landing page que converte</h3>
+  <div class="checklist">
+    <label><input type="checkbox"><span><span class="ct">Defini UMA meta</span><span class="cd">Venda direta, WhatsApp, e-mail ou formulário.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Headline com promessa forte</span><span class="cd">Aparece sem rolar a página.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Subheadline explicativa</span><span class="cd">Diz em 1 frase o que você vende.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Botão (CTA) grande e destacado</span><span class="cd">Cor diferente, puxando o olhar.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Prova social</span><span class="cd">Avaliações, notas ou depoimentos.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Benefícios e prova lógica</span><span class="cd">O que ganha + números reais.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Quebra de objeções</span><span class="cd">Perguntas frequentes respondidas.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Garantia + escassez no fechamento</span><span class="cd">Segurança e urgência nos "pés".</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Fotos e vídeos de qualidade</span><span class="cd">Criam desejo (melhore com IA se preciso).</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Tag do Google + Pixel da Meta instalados</span><span class="cd">Página pronta para anunciar.</span></span></label>
+  </div>
+
+  <h3 style="font-size:21px;margin:30px 0 12px">🗣️ Glossário com pronúncia aproximada</h3>
+  <div class="gloss">
+    <div class="row"><span class="term">Landing page</span><span class="pron">(lén-ding pêi-dji)</span><span class="def">Página única, feita pra converter o visitante em cliente ou lead.</span></div>
+    <div class="row"><span class="term">Headline</span><span class="pron">(réd-láin)</span><span class="def">O título principal: a grande promessa da página.</span></div>
+    <div class="row"><span class="term">Subheadline</span><span class="pron">(sãb-réd-láin)</span><span class="def">A linha de apoio que explica rapidamente o que você vende.</span></div>
+    <div class="row"><span class="term">CTA · Call to action</span><span class="pron">(côl tchu ék-chãn)</span><span class="def">Chamada para ação — o botão que diz o que fazer ("Comprar agora").</span></div>
+    <div class="row"><span class="term">Lead</span><span class="pron">(líd)</span><span class="def">Contato interessado que deixou WhatsApp, e-mail ou preencheu o formulário.</span></div>
+    <div class="row"><span class="term">ROI</span><span class="pron">(é-ô-í / "rôi")</span><span class="def">Retorno sobre o Investimento: quanto volta pra cada real investido.</span></div>
+    <div class="row"><span class="term">Benchmark</span><span class="pron">(bêntch-mârk)</span><span class="def">Analisar e modelar referências que já dão certo no mercado.</span></div>
+    <div class="row"><span class="term">Copy</span><span class="pron">(cópi)</span><span class="def">O texto persuasivo da página.</span></div>
+    <div class="row"><span class="term">Pixel / Tag</span><span class="pron">(píc-sel / tég)</span><span class="def">Códigos que registram quem visita o site para a Meta e o Google.</span></div>
+    <div class="row"><span class="term">Tráfego pago</span><span class="pron">(tráfego pago)</span><span class="def">Anúncios pagos no Google, Instagram, Facebook e YouTube.</span></div>
+  </div>
+
+  <h3 style="font-size:21px;margin:30px 0 12px">🧩 Quiz rápido</h3>
+
+  <div class="quiz">
+    <div class="q">1. Quantas metas uma landing page deve ter?</div>
+    <div class="opts">
+      <label><input type="radio" name="q1"> Quantas couberem na página</label>
+      <label><input type="radio" name="q1"> Apenas uma</label>
+      <label><input type="radio" name="q1"> Pelo menos três</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>Apenas uma.</b> Mantra nº 1: uma página, um objetivo. Menos é mais.</p></details>
+  </div>
+
+  <div class="quiz">
+    <div class="q">2. Em qual parte da página você NÃO pode errar?</div>
+    <div class="opts">
+      <label><input type="radio" name="q2"> Nos pés</label>
+      <label><input type="radio" name="q2"> No corpo</label>
+      <label><input type="radio" name="q2"> Na cabeça</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>Na cabeça.</b> Sem braços ou pernas dá pra viver; sem cabeça, não. É lá que está a headline, a subheadline e o botão.</p></details>
+  </div>
+
+  <div class="quiz">
+    <div class="q">3. Por que ter um site é melhor que depender só do Instagram?</div>
+    <div class="opts">
+      <label><input type="radio" name="q3"> Porque é mais barato</label>
+      <label><input type="radio" name="q3"> Porque o site é seu — a rede social é "casa alugada"</label>
+      <label><input type="radio" name="q3"> Porque o Instagram não tem público</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>O site é seu.</b> A rede social pode te bloquear a qualquer momento; o site você controla, coleta dados e vende no automático.</p></details>
+  </div>
+
+  <div class="call do" style="margin-top:8px"><span class="ic">🚀</span>
+    <h4>Atividade final — sua primeira landing page</h4>
+    1) Escolha o produto "pão de padaria". 2) Defina a meta. 3) Capture 2 páginas de referência com o GoFullPage. 4) Peça pra IA criar a sua, usando a estrutura cabeça-corpo-pés. 5) Rode o checklist acima. <b>Acabou a desculpa! 💪</b></div>
+</section>
+
+</main>
+
+<footer>
+  <p><strong>📘 Crie Landing Pages que Vendem com IA</strong></p>
+  <p>Material didático · Marketing digital na prática · Estratégia antes do botão</p>
+</footer>
+
+<script>
+  // reading progress
+  var bar=document.getElementById('progress');
+  function onScroll(){
+    var h=document.documentElement;
+    var sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight);
+    bar.style.width=(sc*100)+'%';
+  }
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // reveal on scroll
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  }
+</script>
 </body>
 </html>
