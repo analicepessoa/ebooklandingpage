@@ -3,1234 +3,811 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Landing Page Perfeita — Analice Pessoa · English</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<title>E-book · Crie Landing Pages que Vendem com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --blue-deep: #060E2A;
-  --blue:      #0B1A4A;
-  --blue2:     #16307A;
-  --blue-accent:#3B6FF5;
-  --blue-light: #6E9BFF;
-  --orange:    #F57C00;
-  --orange-dark:#D46800;
-  --orange-light:#FF9D40;
-  --orange-pale:#FFF5EB;
-  --teal:      #0D9488;
-  --teal-light:#E2F8F5;
-  --rose:      #EF4444;
-  --rose-light:#FEF2F2;
-  --white:     #FFFFFF;
-  --surface:   #F7F8FC;
-  --surface2:  #ECEEF6;
-  --ink:       #0B1426;
-  --slate:     #64748B;
-  --border:    rgba(0,0,0,.08);
-  --radius:    14px;
-  --radius-lg: 22px;
-  --shadow:    0 2px 16px rgba(0,0,0,.08);
-  --shadow-lg: 0 8px 40px rgba(0,0,0,.13);
-}
+  :root{
+    --bg:#F4F7F6;
+    --paper:#FFFFFF;
+    --ink:#13201C;
+    --teal:#0E6B53;
+    --teal-deep:#0A4E3C;
+    --teal-soft:#E3F1EC;
+    --coral:#FF5A3C;
+    --coral-soft:#FFE9E3;
+    --gold:#E8A53A;
+    --gold-soft:#FBEFD8;
+    --text:#283330;
+    --muted:#5E6B66;
+    --line:#DCE6E2;
+    --radius:18px;
+    --shadow:0 14px 40px -22px rgba(10,60,45,.45);
+    --maxw:880px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:17px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:'Bricolage Grotesque','Inter',sans-serif;color:var(--ink);line-height:1.12;letter-spacing:-.02em;margin:0}
+  p{margin:0 0 1em}
+  a{color:var(--teal)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+  /* progress bar */
+  #progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:99;transition:width .12s ease-out}
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--surface);
-  color: var(--ink);
-  line-height: 1.65;
-  min-height: 100vh;
-}
+  /* ---------- COVER ---------- */
+  .cover{
+    background:radial-gradient(120% 90% at 80% -10%, #147d61 0%, var(--teal-deep) 55%, #073026 100%);
+    color:#fff;padding:74px 0 64px;position:relative;overflow:hidden;
+  }
+  .cover::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(60% 40% at 15% 110%, rgba(255,90,60,.28), transparent 60%);
+    pointer-events:none}
+  .cover .wrap{position:relative;z-index:2}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.22);padding:7px 15px;border-radius:999px;
+    font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .cover h1{color:#fff;font-size:clamp(34px,7vw,60px);font-weight:800;margin:22px 0 14px}
+  .cover h1 em{font-style:normal;color:var(--gold)}
+  .cover .lead{font-size:clamp(17px,2.4vw,21px);color:#d6efe6;max-width:620px;margin-bottom:30px}
+  .cover-tags{display:flex;flex-wrap:wrap;gap:10px}
+  .cover-tags span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);
+    padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500}
 
-/* ── HERO ── */
-.hero {
-  background: linear-gradient(150deg, var(--blue-deep) 0%, var(--blue) 50%, var(--blue2) 100%);
-  position: relative; overflow: hidden;
-  padding: 56px 24px 64px;
-  text-align: center;
-}
-.hero::before {
-  content:''; position:absolute; inset:0;
-  background: radial-gradient(ellipse 70% 60% at 30% 40%, rgba(59,111,245,.18) 0%, transparent 70%),
-              radial-gradient(ellipse 50% 50% at 80% 70%, rgba(245,124,0,.14) 0%, transparent 70%);
-}
-.hero-inner { position:relative; z-index:1; max-width:680px; margin:0 auto; }
+  /* ---------- TOC ---------- */
+  .toc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);margin:-36px auto 0;position:relative;z-index:5;padding:30px 30px 14px}
+  .toc h2{font-size:15px;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:18px}
+  .toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .toc li a{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--text);
+    padding:11px 12px;border-radius:12px;font-weight:500;transition:background .15s}
+  .toc li a:hover,.toc li a:focus-visible{background:var(--teal-soft);outline:none}
+  .toc .n{font-family:'Bricolage Grotesque';font-weight:800;color:var(--coral);min-width:24px}
 
-.hero-eyebrow {
-  display:inline-flex; align-items:center; gap:8px;
-  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
-  color:var(--orange-light); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
-  padding:6px 16px; border-radius:99px; margin-bottom:22px;
-}
-.hero h1 {
-  font-family:'Nunito',sans-serif; font-size:clamp(28px,5vw,46px);
-  font-weight:900; color:var(--white); line-height:1.15;
-  letter-spacing:-.02em; margin-bottom:16px;
-}
-.hero h1 span { color:var(--orange-light); }
-.hero p {
-  font-size:clamp(14px,2vw,17px); color:rgba(255,255,255,.75);
-  max-width:520px; margin:0 auto 32px;
-}
-.hero-meta {
-  display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap;
-}
-.hero-chip {
-  display:flex; align-items:center; gap:6px;
-  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.8); font-size:12px; font-weight:600;
-  padding:6px 14px; border-radius:99px;
-}
-.hero-chip i { color:var(--orange-light); }
+  /* ---------- SECTIONS ---------- */
+  section.aula{padding:54px 0 6px}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+  .eyebrow .chip{background:var(--coral);color:#fff;width:34px;height:34px;border-radius:10px;
+    display:grid;place-items:center;font-family:'Bricolage Grotesque';font-size:17px;letter-spacing:0}
+  section.aula h2{font-size:clamp(26px,4.4vw,36px);font-weight:800;margin-bottom:6px}
+  .aula-sub{color:var(--muted);font-size:18px;margin:6px 0 26px;max-width:640px}
+  .block{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px 28px;margin:0 0 20px;box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .block h3{font-size:21px;margin-bottom:10px}
+  .block h3 .em{font-size:24px;margin-right:6px}
 
-/* ── CONTAINER ── */
-.container { max-width:780px; margin:0 auto; padding:0 20px; }
+  ul.ticks{list-style:none;margin:0 0 .5em;padding:0}
+  ul.ticks li{position:relative;padding:6px 0 6px 32px;}
+  ul.ticks li::before{content:"✅";position:absolute;left:0;top:5px;font-size:15px}
+  ul.dots{margin:0 0 .5em;padding-left:22px}
+  ul.dots li{margin:5px 0}
 
-/* ── PROGRESS TIMELINE ── */
-.timeline {
-  display:flex; overflow-x:auto; gap:0;
-  background:var(--white); border-bottom:1px solid var(--border);
-  position:sticky; top:0; z-index:50;
-  padding:0 16px;
-  scrollbar-width:none;
-}
-.timeline::-webkit-scrollbar { display:none; }
-.tl-step {
-  display:flex; align-items:center; gap:7px;
-  padding:14px 16px; white-space:nowrap;
-  font-size:12px; font-weight:700; color:var(--slate);
-  border-bottom:3px solid transparent;
-  cursor:pointer; transition:.2s;
-  flex-shrink:0;
-}
-.tl-step.active { color:var(--orange); border-bottom-color:var(--orange); }
-.tl-step.done   { color:var(--teal); }
-.tl-num {
-  width:22px; height:22px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:800;
-  background:var(--surface2); color:var(--slate); flex-shrink:0;
-}
-.tl-step.active .tl-num { background:var(--orange); color:#fff; }
-.tl-step.done   .tl-num { background:var(--teal); color:#fff; }
+  /* PASSO steps */
+  .passo{display:flex;gap:18px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--radius);padding:22px 24px;margin:0 0 16px;box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .passo .num{flex:none;width:48px;height:48px;border-radius:14px;background:var(--teal);color:#fff;
+    font-family:'Bricolage Grotesque';font-weight:800;font-size:22px;display:grid;place-items:center}
+  .passo h3{font-size:20px;margin-bottom:6px}
+  .passo p:last-child{margin-bottom:0}
 
-/* ── PASSO SECTION ── */
-.passo { display:none; padding:40px 0 60px; }
-.passo.active { display:block; }
+  /* callouts */
+  .call{border-radius:var(--radius);padding:20px 22px 20px 56px;margin:0 0 20px;position:relative;font-size:16.5px}
+  .call .ic{position:absolute;left:18px;top:18px;font-size:22px}
+  .call b{font-weight:700}
+  .call.tip{background:var(--gold-soft);border:1px solid #efd9a8}
+  .call.warn{background:var(--coral-soft);border:1px solid #ffc8bb}
+  .call.fact{background:var(--teal-soft);border:1px solid #bfe2d6}
+  .call.do{background:#EDF6F0;border:1px solid #cfe7d8}
+  .call h4{font-size:16px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;color:var(--teal-deep)}
+  .call.warn h4{color:#c23a1f}
+  .call.tip h4{color:#9a6b15}
 
-.passo-header {
-  display:flex; align-items:center; gap:16px;
-  margin-bottom:28px;
-}
-.passo-badge {
-  width:52px; height:52px; border-radius:16px; flex-shrink:0;
-  background:linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
-  display:flex; align-items:center; justify-content:center;
-  font-size:22px; box-shadow:0 4px 16px rgba(245,124,0,.3);
-}
-.passo-badge.blue {
-  background:linear-gradient(135deg, var(--blue-accent) 0%, var(--blue-light) 100%);
-  box-shadow:0 4px 16px rgba(59,111,245,.3);
-}
-.passo-badge.teal {
-  background:linear-gradient(135deg, var(--teal) 0%, #34D399 100%);
-  box-shadow:0 4px 16px rgba(13,148,136,.3);
-}
-.passo-meta { flex:1; }
-.passo-label {
-  font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--orange); margin-bottom:3px;
-}
-.passo-title {
-  font-family:'Nunito',sans-serif; font-size:clamp(20px,3.5vw,26px);
-  font-weight:900; color:var(--ink); letter-spacing:-.02em;
-}
+  /* cards grid */
+  .grid{display:grid;gap:16px}
+  .grid.g2{grid-template-columns:1fr 1fr}
+  .grid.g4{grid-template-columns:1fr 1fr}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px;
+    box-shadow:0 8px 24px -20px rgba(10,60,45,.4)}
+  .card .ico{font-size:30px;display:block;margin-bottom:10px}
+  .card h4{font-size:18px;margin-bottom:6px}
+  .card p{font-size:15.5px;color:var(--muted);margin:0}
+  .card .meta-num{font-family:'Bricolage Grotesque';font-weight:800;color:var(--coral);font-size:14px;letter-spacing:.08em}
 
-.passo-intro {
-  background:linear-gradient(135deg, var(--blue-deep) 0%, var(--blue) 100%);
-  border-radius:var(--radius-lg); padding:22px 26px; margin-bottom:28px;
-  color:rgba(255,255,255,.9); font-size:15px; line-height:1.7;
-  border-left:4px solid var(--orange-light);
-  position:relative; overflow:hidden;
-}
-.passo-intro::after {
-  content:''; position:absolute; top:-30px; right:-30px;
-  width:120px; height:120px; border-radius:50%;
-  background:radial-gradient(circle, rgba(245,124,0,.12) 0%, transparent 70%);
-}
+  /* compare table */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);
+    border-radius:var(--radius);overflow:hidden;margin-bottom:20px;background:var(--paper)}
+  .vs .head{padding:18px 22px;color:#fff;font-family:'Bricolage Grotesque';font-weight:800;font-size:20px}
+  .vs .head.a{background:var(--teal)}
+  .vs .head.b{background:var(--coral)}
+  .vs .col{padding:6px 22px 18px}
+  .vs ul{list-style:none;margin:14px 0 0;padding:0}
+  .vs ul li{padding:8px 0 8px 26px;position:relative;border-top:1px solid var(--line);font-size:15.5px}
+  .vs ul li:first-child{border-top:none}
+  .vs ul li::before{content:"▸";position:absolute;left:4px;color:var(--teal);font-weight:700}
+  .vs .b ul li::before{color:var(--coral)}
 
-/* ── CONTENT BLOCKS ── */
-.card {
-  background:var(--white); border-radius:var(--radius-lg);
-  box-shadow:var(--shadow); border:1px solid var(--border);
-  margin-bottom:20px;
-}
-.card-body { padding:24px; }
+  /* anatomy figure */
+  .figure{background:linear-gradient(180deg,#0c5341,#073026);border-radius:var(--radius);
+    padding:32px 22px;margin:6px 0 22px;text-align:center}
+  .figure svg{max-width:100%;height:auto}
+  .figcap{color:#bfe2d6;font-size:14px;margin-top:14px}
 
-.section-label {
-  font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--blue-accent); margin-bottom:14px;
-  display:flex; align-items:center; gap:8px;
-}
-.section-label::after {
-  content:''; flex:1; height:1px; background:var(--surface2);
-}
+  /* glossary */
+  .gloss{background:var(--ink);color:#e6f2ec;border-radius:var(--radius);padding:28px 28px 14px}
+  .gloss h3{color:#fff}
+  .gloss .row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;
+    padding:14px 0;border-top:1px solid rgba(255,255,255,.12)}
+  .gloss .row:first-of-type{border-top:none}
+  .gloss .term{font-family:'Bricolage Grotesque';font-weight:700;color:var(--gold);font-size:18px}
+  .gloss .pron{font-family:'Inter';color:#7fd3b6;font-size:14px;font-style:italic}
+  .gloss .def{flex:1 1 100%;color:#cfe2da;font-size:15px;margin-top:2px}
 
-h3 {
-  font-family:'Nunito',sans-serif; font-size:18px; font-weight:900;
-  color:var(--ink); margin-bottom:10px; letter-spacing:-.01em;
-}
-p { color:var(--slate); font-size:14px; line-height:1.75; margin-bottom:12px; }
-p:last-child { margin-bottom:0; }
+  /* quiz */
+  .quiz{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-bottom:16px}
+  .quiz .q{font-weight:700;color:var(--ink);font-family:'Bricolage Grotesque';font-size:18px;margin-bottom:12px}
+  .quiz .opts{display:grid;gap:8px;margin-bottom:8px}
+  .quiz .opts label{display:flex;gap:10px;align-items:center;padding:10px 14px;border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;font-size:15.5px;transition:background .15s,border-color .15s}
+  .quiz .opts label:hover{background:var(--teal-soft)}
+  .quiz details{margin-top:6px}
+  .quiz summary{cursor:pointer;color:var(--coral);font-weight:600;font-size:14.5px}
+  .quiz details p{background:var(--teal-soft);border-radius:12px;padding:12px 16px;margin-top:10px;font-size:15px}
 
-/* ── HIGHLIGHT BOX ── */
-.highlight {
-  border-radius:var(--radius); padding:18px 20px; margin-bottom:16px;
-  display:flex; gap:14px; align-items:flex-start;
-}
-.highlight.orange { background:var(--orange-pale); border-left:4px solid var(--orange); }
-.highlight.blue   { background:#EEF4FF; border-left:4px solid var(--blue-accent); }
-.highlight.teal   { background:var(--teal-light); border-left:4px solid var(--teal); }
-.highlight.rose   { background:var(--rose-light); border-left:4px solid var(--rose); }
-.highlight-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
-.highlight-body { flex:1; }
-.highlight-body strong { display:block; font-weight:700; font-size:14px; color:var(--ink); margin-bottom:4px; }
-.highlight-body span   { font-size:13px; color:var(--slate); line-height:1.7; }
+  /* checklist */
+  .checklist{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:10px 26px;margin-bottom:20px}
+  .checklist label{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line);cursor:pointer}
+  .checklist label:first-child{border-top:none}
+  .checklist input{margin-top:5px;width:20px;height:20px;accent-color:var(--teal);flex:none}
+  .checklist .ct{font-weight:600;color:var(--ink)}
+  .checklist .cd{display:block;color:var(--muted);font-size:14.5px;font-weight:400}
 
-/* ── STEP LIST ── */
-.step-list { list-style:none; display:flex; flex-direction:column; gap:14px; }
-.step-item {
-  display:flex; gap:14px; align-items:flex-start;
-  background:var(--surface); border-radius:var(--radius);
-  padding:16px 18px; border:1px solid var(--border);
-}
-.step-num {
-  width:30px; height:30px; border-radius:10px; flex-shrink:0;
-  background:linear-gradient(135deg, var(--orange), var(--orange-light));
-  color:#fff; font-weight:800; font-size:13px;
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 2px 8px rgba(245,124,0,.25);
-}
-.step-num.blue {
-  background:linear-gradient(135deg, var(--blue-accent), var(--blue-light));
-  box-shadow:0 2px 8px rgba(59,111,245,.25);
-}
-.step-content strong { display:block; font-size:14px; font-weight:700; color:var(--ink); margin-bottom:3px; }
-.step-content span   { font-size:13px; color:var(--slate); line-height:1.65; }
+  blockquote{margin:0 0 20px;padding:18px 24px;border-left:4px solid var(--gold);
+    background:var(--gold-soft);border-radius:0 12px 12px 0;font-style:italic;color:#5a4a22}
+  blockquote cite{display:block;font-style:normal;font-weight:600;color:var(--ink);margin-top:8px;font-size:14px}
 
-/* ── ANATOMY CARDS ── */
-.anatomy-grid { display:flex; flex-direction:column; gap:12px; }
-.anatomy-card {
-  border-radius:var(--radius); border:1px solid var(--border);
-  overflow:hidden;
-}
-.anatomy-card-head {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 18px;
-  background:linear-gradient(135deg, var(--blue-deep), var(--blue));
-  cursor:pointer;
-}
-.anatomy-card-head .num {
-  width:28px; height:28px; border-radius:9px;
-  background:var(--orange); color:#fff;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:900; font-size:13px; flex-shrink:0;
-}
-.anatomy-card-head .title {
-  flex:1; font-weight:800; font-size:14px; color:#fff;
-}
-.anatomy-card-head .chevron {
-  color:rgba(255,255,255,.5); transition:.25s;
-}
-.anatomy-card-body {
-  display:none; padding:18px 20px;
-  background:var(--white);
-}
-.anatomy-card.open .anatomy-card-body { display:block; }
-.anatomy-card.open .chevron { transform:rotate(90deg); color:var(--orange-light); }
+  hr.div{border:none;border-top:1px solid var(--line);margin:46px 0 0}
 
-.anatomy-card-body ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
-.anatomy-card-body li {
-  display:flex; gap:10px; align-items:flex-start;
-  font-size:13px; color:var(--slate); line-height:1.65;
-}
-.anatomy-card-body li::before {
-  content:'→'; color:var(--orange); font-weight:700; flex-shrink:0; margin-top:1px;
-}
+  footer{background:var(--ink);color:#9fc6b8;text-align:center;padding:40px 22px;margin-top:56px;font-size:14px}
+  footer strong{color:#fff}
 
-/* ── DO / DONT ── */
-.do-dont {
-  display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px;
-}
-@media(max-width:520px){ .do-dont { grid-template-columns:1fr; } }
-.do-card, .dont-card {
-  border-radius:var(--radius); padding:16px 18px;
-}
-.do-card   { background:var(--teal-light); border:1px solid rgba(13,148,136,.2); }
-.dont-card { background:var(--rose-light);  border:1px solid rgba(239,68,68,.2); }
-.do-card   .head { color:var(--teal); font-weight:800; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-.dont-card .head { color:var(--rose); font-weight:800; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
-.do-card   ul, .dont-card ul { list-style:none; display:flex; flex-direction:column; gap:6px; }
-.do-card   li, .dont-card li { font-size:12px; color:var(--slate); display:flex; gap:7px; line-height:1.55; }
-.do-card   li::before { content:'✓'; color:var(--teal); font-weight:700; }
-.dont-card li::before { content:'✗'; color:var(--rose); font-weight:700; }
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
 
-/* ── FUNIL TABLE ── */
-.funil-table { width:100%; border-collapse:collapse; font-size:13px; }
-.funil-table th {
-  background:linear-gradient(135deg, var(--blue-deep), var(--blue));
-  color:#fff; padding:12px 16px; text-align:left; font-size:11px;
-  letter-spacing:.08em; text-transform:uppercase; font-weight:700;
-}
-.funil-table th:first-child { border-radius:12px 0 0 0; }
-.funil-table th:last-child  { border-radius:0 12px 0 0; }
-.funil-table td { padding:12px 16px; color:var(--slate); border-bottom:1px solid var(--border); vertical-align:top; }
-.funil-table tr:last-child td { border-bottom:none; }
-.funil-table tr:nth-child(even) td { background:var(--surface); }
-.etapa-badge {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:3px 10px; border-radius:99px; font-size:11px; font-weight:700;
-}
-.etapa-topo  { background:var(--orange-pale); color:var(--orange-dark); }
-.etapa-meio  { background:#EEF4FF; color:var(--blue-accent); }
-.etapa-fundo { background:var(--teal-light); color:var(--teal); }
-
-/* ── METRICS CARDS ── */
-.metrics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-@media(max-width:480px){ .metrics-grid { grid-template-columns:1fr; } }
-.metric-card {
-  background:var(--white); border-radius:var(--radius);
-  border:1px solid var(--border); padding:18px 16px; text-align:center;
-}
-.metric-num  { font-family:'Nunito',sans-serif; font-size:30px; font-weight:900; color:var(--orange); line-height:1; }
-.metric-label { font-size:12px; color:var(--slate); margin-top:5px; line-height:1.4; }
-
-/* ── PROMPT BOX ── */
-.prompt-box {
-  background:var(--ink); border-radius:var(--radius); padding:20px 22px;
-  font-family:'JetBrains Mono', 'Courier New', monospace;
-  font-size:12.5px; color:#A5B4FC; line-height:1.7;
-  position:relative; margin-bottom:16px;
-}
-.prompt-box .prompt-label {
-  font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--orange-light); font-weight:700; margin-bottom:8px;
-  font-family:'Inter',sans-serif;
-}
-.prompt-box span { color:var(--orange-light); }
-
-/* ── COPY BTN ── */
-.copy-btn {
-  position:absolute; top:14px; right:14px;
-  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
-  color:rgba(255,255,255,.7); padding:4px 10px; border-radius:7px;
-  font-size:11px; cursor:pointer; font-family:'Inter',sans-serif;
-  transition:.2s;
-}
-.copy-btn:hover { background:rgba(255,255,255,.18); color:#fff; }
-
-/* ── NAV BTNS ── */
-.nav-btns {
-  display:flex; gap:12px; justify-content:space-between;
-  padding:28px 0 0; border-top:1px solid var(--border); margin-top:8px;
-}
-.btn {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:12px 24px; border-radius:var(--radius);
-  font-weight:700; font-size:14px; cursor:pointer;
-  border:none; transition:.2s; text-decoration:none;
-}
-.btn-primary {
-  background:linear-gradient(135deg, var(--orange), var(--orange-light));
-  color:#fff; box-shadow:0 4px 16px rgba(245,124,0,.3);
-}
-.btn-primary:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(245,124,0,.4); }
-.btn-ghost {
-  background:var(--surface2); color:var(--slate); border:1px solid var(--border);
-}
-.btn-ghost:hover { background:var(--surface3,#d8dce8); color:var(--ink); }
-.btn-blue {
-  background:linear-gradient(135deg, var(--blue-accent), var(--blue-light));
-  color:#fff; box-shadow:0 4px 16px rgba(59,111,245,.3);
-}
-.btn-blue:hover { transform:translateY(-1px); }
-
-/* ── QUIZ ── */
-#quiz-section { padding:40px 0 60px; display:none; }
-#quiz-section.active { display:block; }
-.quiz-header {
-  background:linear-gradient(135deg, var(--blue-deep), var(--blue));
-  border-radius:var(--radius-lg); padding:28px 28px 24px; margin-bottom:24px;
-  text-align:center; position:relative; overflow:hidden;
-}
-.quiz-header::before {
-  content:'🎯'; font-size:56px; position:absolute; top:-10px; right:16px; opacity:.15;
-}
-.quiz-header h2 {
-  font-family:'Nunito',sans-serif; font-size:22px; font-weight:900;
-  color:#fff; margin-bottom:6px;
-}
-.quiz-header p { color:rgba(255,255,255,.7); font-size:13px; margin:0; }
-
-.quiz-progress-bar {
-  height:5px; background:rgba(255,255,255,.15); border-radius:99px; margin-top:14px;
-}
-.quiz-progress-fill {
-  height:100%; background:var(--orange-light); border-radius:99px;
-  transition:.4s ease;
-}
-
-.quiz-card {
-  background:var(--white); border-radius:var(--radius-lg);
-  box-shadow:var(--shadow-lg); border:1px solid var(--border);
-  padding:28px;
-}
-.quiz-q-num {
-  font-size:11px; font-weight:800; color:var(--orange);
-  letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px;
-}
-.quiz-q-text {
-  font-family:'Nunito',sans-serif; font-size:19px; font-weight:800;
-  color:var(--ink); line-height:1.4; margin-bottom:22px;
-}
-.quiz-options { display:flex; flex-direction:column; gap:10px; }
-.quiz-opt {
-  display:flex; align-items:center; gap:14px;
-  padding:14px 18px; border-radius:var(--radius);
-  border:2px solid var(--border); background:var(--surface);
-  cursor:pointer; font-size:14px; color:var(--ink); font-weight:500;
-  transition:.18s;
-}
-.quiz-opt:hover:not(:disabled) { border-color:var(--orange); background:var(--orange-pale); }
-.quiz-opt.correct { border-color:var(--teal); background:var(--teal-light); color:var(--teal); font-weight:700; }
-.quiz-opt.wrong   { border-color:var(--rose);  background:var(--rose-light);  color:var(--rose); font-weight:700; }
-.quiz-opt:disabled { cursor:default; }
-.quiz-opt-letter {
-  width:28px; height:28px; border-radius:8px; flex-shrink:0;
-  background:var(--surface2); display:flex; align-items:center; justify-content:center;
-  font-weight:800; font-size:12px; transition:.18s;
-}
-.quiz-opt.correct .quiz-opt-letter { background:var(--teal); color:#fff; }
-.quiz-opt.wrong   .quiz-opt-letter { background:var(--rose);  color:#fff; }
-
-.quiz-feedback {
-  margin-top:14px; padding:12px 16px; border-radius:var(--radius);
-  font-size:13px; font-weight:600; display:none;
-}
-.quiz-feedback.show { display:block; }
-.quiz-feedback.ok  { background:var(--teal-light); color:var(--teal); }
-.quiz-feedback.err { background:var(--rose-light);  color:var(--rose); }
-
-.quiz-nav { margin-top:20px; text-align:right; }
-
-/* ── RESULT ── */
-.result-card {
-  background:linear-gradient(135deg, var(--blue-deep), var(--blue));
-  border-radius:var(--radius-lg); padding:40px 28px;
-  text-align:center; color:#fff;
-}
-.result-emoji { font-size:56px; margin-bottom:16px; }
-.result-card h2 { font-family:'Nunito',sans-serif; font-size:26px; font-weight:900; margin-bottom:8px; }
-.result-card p  { color:rgba(255,255,255,.75); font-size:14px; margin-bottom:24px; }
-.result-score {
-  font-family:'Nunito',sans-serif; font-size:52px; font-weight:900; color:var(--orange-light);
-  line-height:1;
-}
-.result-label { font-size:13px; color:rgba(255,255,255,.6); margin-top:6px; margin-bottom:28px; }
-.result-btns  { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-
-/* ── BACK LINK ── */
-.back-link {
-  display:inline-flex; align-items:center; gap:6px;
-  color:rgba(255,255,255,.7); font-size:13px; font-weight:600;
-  text-decoration:none; margin-bottom:20px;
-  transition:.2s;
-}
-.back-link:hover { color:#fff; }
-
-/* ── FOOTER ── */
-.footer {
-  background:var(--blue-deep); color:rgba(255,255,255,.5);
-  text-align:center; padding:24px; font-size:12px;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-.footer strong { color:var(--orange-light); }
+  @media (max-width:680px){
+    body{font-size:16px}
+    .toc ol{grid-template-columns:1fr}
+    .grid.g2,.grid.g4,.vs{grid-template-columns:1fr}
+    .vs .col{border-top:1px solid var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    #progress{transition:none}
+  }
 </style>
 </head>
 <body>
+<div id="progress"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <a href="./index.html" class="back-link"><i class="fa-solid fa-chevron-left"></i> Voltar ao Portal</a>
-    <div class="hero-eyebrow"><i class="fa-solid fa-rocket"></i> E-COMMERCE E VENDAS DIGITAIS</div>
-    <h1>O <span>Raio-X</span> da<br>Landing Page Perfeita</h1>
-    <p>Da estrutura obrigatória às métricas que importam — tudo o que você precisa saber para criar uma página que realmente vende.</p>
-    <div class="hero-meta">
-      <div class="hero-chip"><i class="fa-solid fa-layer-group"></i> 7 Passos</div>
-      <div class="hero-chip"><i class="fa-solid fa-circle-check"></i> Quiz Final</div>
-      <div class="hero-chip"><i class="fa-solid fa-clock"></i> ~25 min</div>
+<!-- ============ COVER ============ -->
+<header class="cover">
+  <div class="wrap">
+    <span class="badge">📘 E-book · Marketing Digital na Prática</span>
+    <h1>Crie Landing Pages que <em>Vendem</em> com Inteligência Artificial</h1>
+    <p class="lead">Do zero ao site no ar em minutos. Aprenda a estrutura que converte visitantes em clientes — mesmo sem saber design ou programação.</p>
+    <div class="cover-tags">
+      <span>🎯 Estratégia antes do botão</span>
+      <span>🤖 Criação com IA</span>
+      <span>💰 Foco em vendas</span>
+      <span>🇧🇷 Ferramentas usadas no Brasil</span>
     </div>
   </div>
+</header>
+
+<!-- ============ TOC ============ -->
+<div class="wrap">
+  <nav class="toc reveal">
+    <h2>📑 O que você vai aprender</h2>
+    <ol>
+      <li><a href="#a1"><span class="n">1</span><span>Por que você <b>precisa</b> de um site</span></a></li>
+      <li><a href="#a2"><span class="n">2</span><span>Site × Landing Page: a diferença</span></a></li>
+      <li><a href="#a3"><span class="n">3</span><span>As 4 metas de uma landing page</span></a></li>
+      <li><a href="#a4"><span class="n">4</span><span>Anatomia da página que converte</span></a></li>
+      <li><a href="#a5"><span class="n">5</span><span>Benchmark imbatível</span></a></li>
+      <li><a href="#a6"><span class="n">6</span><span>Crie sua página com IA (passo a passo)</span></a></li>
+      <li><a href="#a7"><span class="n">7</span><span>Tudo é marketing</span></a></li>
+      <li><a href="#a8"><span class="n">8</span><span>Hacks e erros fatais no Google Sites</span></a></li>
+      <li><a href="#a9"><span class="n">9</span><span>O funil de vendas digital</span></a></li>
+      <li><a href="#a10"><span class="n">10</span><span>Métricas e pós-venda</span></a></li>
+      <li><a href="#final"><span class="n">★</span><span>Checklist, glossário e atividades</span></a></li>
+    </ol>
+  </nav>
 </div>
 
-<!-- TIMELINE NAV -->
-<div class="timeline" id="timeline">
-  <div class="tl-step active" data-step="1" onclick="goTo(1)">
-    <div class="tl-num">1</div><span>Introdução</span>
-  </div>
-  <div class="tl-step" data-step="2" onclick="goTo(2)">
-    <div class="tl-num">2</div><span>Hero Section</span>
-  </div>
-  <div class="tl-step" data-step="3" onclick="goTo(3)">
-    <div class="tl-num">3</div><span>As 5 Dobras</span>
-  </div>
-  <div class="tl-step" data-step="4" onclick="goTo(4)">
-    <div class="tl-num">4</div><span>Hacks</span>
-  </div>
-  <div class="tl-step" data-step="5" onclick="goTo(5)">
-    <div class="tl-num">5</div><span>Funil de Vendas</span>
-  </div>
-  <div class="tl-step" data-step="6" onclick="goTo(6)">
-    <div class="tl-num">6</div><span>Métricas</span>
-  </div>
-  <div class="tl-step" data-step="7" onclick="goTo(7)">
-    <div class="tl-num">7</div><span>Mão na Massa</span>
-  </div>
-  <div class="tl-step" data-step="quiz" onclick="goTo('quiz')">
-    <div class="tl-num">✓</div><span>Quiz</span>
-  </div>
-</div>
+<main class="wrap">
 
-<div class="container">
+<!-- ============ AULA 1 ============ -->
+<section class="aula" id="a1">
+  <span class="eyebrow"><span class="chip">1</span> Aula 1</span>
+  <h2>Por que você precisa de um site 🏠</h2>
+  <p class="aula-sub">A regra de ouro do marketing digital: <b>quem não tem site não existe na internet — e quem não existe, não vende.</b></p>
 
-  <!-- ══ PASSO 1 ══ -->
-  <section class="passo active" id="passo-1">
-    <div class="passo-header">
-      <div class="passo-badge">🏁</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 1</div>
-        <div class="passo-title">Por que uma Landing Page?</div>
-      </div>
-    </div>
+  <div class="call fact"><span class="ic">📱</span>
+    <h4>A atenção está na internet</h4>
+    Repare nas pessoas no ônibus, na fila do banco, no parquinho — todo mundo de cabeça baixa, no celular. A atenção das pessoas migrou pra tela. <b>Quem aparece onde está a atenção, vende mais.</b> Estar na internet deixou de ser opção: é onde o cliente já está te procurando.</div>
 
-    <div class="passo-intro">
-      Uma Landing Page não é um site qualquer — é uma <strong>máquina de conversão</strong> com um único objetivo: fazer o visitante tomar UMA ação (comprar, entrar em contato, se inscrever). Tudo na página trabalha para isso.
-    </div>
+  <div class="block">
+    <h3><span class="em">🔑</span>Um site é a sua casa própria</h3>
+    <p>Instagram, TikTok e YouTube são casas <b>alugadas</b>. O perfil é da Meta; o canal é do Google. Se a plataforma decidir te bloquear amanhã, você perde tudo. O site é a única coisa que é <b>realmente sua</b>.</p>
+    <ul class="ticks">
+      <li>Você é o dono e faz o que quiser com ele.</li>
+      <li>Coleta dados e inteligência que nenhuma rede social te entrega.</li>
+      <li>Vende no automático, até enquanto você dorme ou está de férias.</li>
+      <li>Alimenta o <b>Pixel da Meta</b> e a <b>Tag do Google</b> com quem visitou — e isso traz mais clientes.</li>
+    </ul>
+  </div>
 
+  <div class="grid g2">
     <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-lightbulb"></i> O que é diferente</div>
-        <h3>Site normal vs. Landing Page</h3>
-        <p>Um site comum tem menus, várias páginas, várias opções. Uma Landing Page tem <strong>zero distrações</strong>. O visitante só tem duas escolhas: clicar no botão ou fechar a aba.</p>
-        <div class="do-dont">
-          <div class="do-card">
-            <div class="head"><i class="fa-solid fa-check-circle"></i> Landing Page</div>
-            <ul>
-              <li>Um objetivo claro</li>
-              <li>Sem menu de navegação</li>
-              <li>Botão de ação bem visível</li>
-              <li>Texto direto e curto</li>
-            </ul>
-          </div>
-          <div class="dont-card">
-            <div class="head"><i class="fa-solid fa-times-circle"></i> Site Comum</div>
-            <ul>
-              <li>Vários objetivos misturados</li>
-              <li>Menu com 8 páginas</li>
-              <li>Links para Instagram, blog…</li>
-              <li>Textos longos sem foco</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <span class="ico">🔎</span>
+      <h4>Aparece no Google</h4>
+      <p>Com um site, você surge gratuitamente nas buscas — e agora também nas respostas da inteligência artificial (ChatGPT, Gemini e afins).</p>
     </div>
-
-    <div class="highlight orange">
-      <div class="highlight-icon">⏱️</div>
-      <div class="highlight-body">
-        <strong>A Regra dos 3 Segundos</strong>
-        <span>Você tem apenas 3 segundos para convencer o visitante a ficar. Se o topo da página for confuso, ele fecha e vai embora. Por isso a primeira seção é a mais importante de toda a página.</span>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <span></span>
-      <button class="btn btn-primary" onclick="goTo(2)">Próximo: Hero Section <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 2 ══ -->
-  <section class="passo" id="passo-2">
-    <div class="passo-header">
-      <div class="passo-badge blue">🎯</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 2</div>
-        <div class="passo-title">A Hero Section — A Primeira Dobra</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      "Dobra" é cada seção da página. A <strong>primeira dobra</strong> (Hero Section) é o que o visitante vê sem precisar rolar a tela — e ela precisa conter quatro elementos obrigatórios.
-    </div>
-
     <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-puzzle-piece"></i> Os 4 Elementos Obrigatórios</div>
-        <ul class="step-list">
-          <li class="step-item">
-            <div class="step-num">1</div>
-            <div class="step-content">
-              <strong>Super Promessa (Headline)</strong>
-              <span>Um título grande e impactante. Precisa dizer exatamente o que o cliente vai conseguir. Ex: <em>"Aprenda a Programar do Zero em 30 Dias."</em> Quanto mais específico, melhor.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">2</div>
-            <div class="step-content">
-              <strong>Subtítulo (Subheadline)</strong>
-              <span>Uma linha abaixo do título explicando como a promessa será cumprida. Reforça a credibilidade e complementa o título principal.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">3</div>
-            <div class="step-content">
-              <strong>Botão de Ação (CTA) Primário</strong>
-              <span>O CTA (Call to Action) precisa ser bem visível, em uma cor que contraste com o fundo. Se o site é azul, o botão deve ser <strong>laranja ou amarelo</strong>. Use verbos de ação: "Quero meu acesso", "Falar com especialista".</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num">4</div>
-            <div class="step-content">
-              <strong>Imagem ou Vídeo de Fundo</strong>
-              <span>Uma imagem de alta qualidade que represente o resultado que o cliente deseja — não o produto em si, mas o estilo de vida ou resultado após usar o produto.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="highlight blue">
-      <div class="highlight-icon">🎨</div>
-      <div class="highlight-body">
-        <strong>Dica de Contraste Visual</strong>
-        <span>Use cores complementares para o seu botão. Fundo azul → botão laranja. Fundo escuro → botão claro. O botão precisa "gritar" na tela — se alguém precisar procurar para encontrá-lo, ele está errado.</span>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(1)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo(3)">Próximo: As 5 Dobras <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 3 ══ -->
-  <section class="passo" id="passo-3">
-    <div class="passo-header">
-      <div class="passo-badge">🏗️</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 3</div>
-        <div class="passo-title">A Anatomia Completa — 5 Dobras</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      Toda landing page de sucesso segue uma <strong>ordem de conteúdo</strong>. Como uma história bem contada: primeiro apresenta o problema, depois a solução, depois a prova de que funciona. Clique em cada dobra para expandir.
-    </div>
-
-    <div class="anatomy-grid">
-      <div class="anatomy-card open">
-        <div class="anatomy-card-head" onclick="toggleCard(this)">
-          <div class="num">1</div>
-          <div class="title">🚀 Hero Section — A Primeira Dobra</div>
-          <i class="fa-solid fa-chevron-right chevron"></i>
-        </div>
-        <div class="anatomy-card-body">
-          <ul>
-            <li>Headline impactante com a grande promessa do produto</li>
-            <li>Subtítulo explicando como a promessa será cumprida</li>
-            <li>Botão de CTA bem visível numa cor contrastante</li>
-            <li>Imagem ou vídeo representando o resultado desejado pelo cliente</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="anatomy-card">
-        <div class="anatomy-card-head" onclick="toggleCard(this)">
-          <div class="num">2</div>
-          <div class="title">💔 A Conexão com o Problema</div>
-          <i class="fa-solid fa-chevron-right chevron"></i>
-        </div>
-        <div class="anatomy-card-body">
-          <ul>
-            <li>Antes de vender a cura, você precisa falar da dor</li>
-            <li>Faça 3 ou 4 perguntas provocativas que o cliente reconheça</li>
-            <li>Ex: <em>"Cansado de enviar currículos e não ser chamado?"</em></li>
-            <li>O cliente precisa sentir que você o entende de verdade</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="anatomy-card">
-        <div class="anatomy-card-head" onclick="toggleCard(this)">
-          <div class="num">3</div>
-          <div class="title">✅ A Solução — Seu Produto ou Serviço</div>
-          <i class="fa-solid fa-chevron-right chevron"></i>
-        </div>
-        <div class="anatomy-card-body">
-          <ul>
-            <li>Apresente o que você faz de forma direta e objetiva</li>
-            <li>Fale em <strong>benefícios</strong>, não em funcionalidades</li>
-            <li>Diga <em>"Acesso vitalício"</em> (benefício) em vez de <em>"100 horas de vídeo"</em> (funcionalidade)</li>
-            <li>Use layout de 3 colunas para listar os benefícios principais</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="anatomy-card">
-        <div class="anatomy-card-head" onclick="toggleCard(this)">
-          <div class="num">4</div>
-          <div class="title">🏆 Autoridade e Prova Social</div>
-          <i class="fa-solid fa-chevron-right chevron"></i>
-        </div>
-        <div class="anatomy-card-body">
-          <ul>
-            <li>Por que as pessoas deveriam confiar em você?</li>
-            <li><strong>Sobre Mim:</strong> foto profissional + resumo da sua experiência</li>
-            <li><strong>Depoimentos:</strong> prints reais do WhatsApp ou vídeos de clientes satisfeitos</li>
-            <li>Use carrossel de imagens para exibir múltiplos depoimentos</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="anatomy-card">
-        <div class="anatomy-card-head" onclick="toggleCard(this)">
-          <div class="num">5</div>
-          <div class="title">❓ Rodapé e FAQ — Última Chance</div>
-          <i class="fa-solid fa-chevron-right chevron"></i>
-        </div>
-        <div class="anatomy-card-body">
-          <ul>
-            <li>A última chance de quebrar as objeções antes da pessoa sair</li>
-            <li>Use um Accordion (grupo recolhível) para criar o FAQ dinâmico</li>
-            <li>Um segundo botão de CTA chamando para o WhatsApp</li>
-            <li>Texto com Direitos Reservados e links para Política de Privacidade</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(2)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo(4)">Próximo: Hacks <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 4 ══ -->
-  <section class="passo" id="passo-4">
-    <div class="passo-header">
-      <div class="passo-badge teal">⚡</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 4</div>
-        <div class="passo-title">Hacks e Erros Fatais</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      Conhecer os truques certos e os erros mais comuns é o que separa uma página amadora de uma página profissional. Veja o que fazer e o que jamais fazer.
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Truques de Mestre no Google Sites</div>
-        <ul class="step-list">
-          <li class="step-item">
-            <div class="step-num blue">A</div>
-            <div class="step-content">
-              <strong>Oculte o Menu de Navegação</strong>
-              <span>Vá em Configurações → Navegação → escolha "Oculto". Sem menu, o cliente só tem duas opções: comprar ou fechar. Zero distração.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">B</div>
-            <div class="step-content">
-              <strong>Use Espaçadores (Respiro Visual)</strong>
-              <span>Uma página toda amontoada parece amadora. Use o "Divisor" do Google Sites entre as seções. Espaço em branco não é espaço desperdiçado — é elegância.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">C</div>
-            <div class="step-content">
-              <strong>Contraste de Fundos entre Blocos</strong>
-              <span>Alterne as cores: primeiro bloco branco, segundo cinza claro, terceiro branco. Isso ajuda o olho a perceber que mudou de assunto.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">D</div>
-            <div class="step-content">
-              <strong>Botão Flutuante de WhatsApp</strong>
-              <span>Use o componente "Incorporar Código" do Google Sites para colar um script HTML com ícone flutuante do WhatsApp. Aumenta a conversão absurdamente.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-triangle-exclamation"></i> O Que NUNCA Fazer</div>
-        <div class="do-dont">
-          <div class="dont-card">
-            <div class="head"><i class="fa-solid fa-ban"></i> Erro Fatal 1</div>
-            <ul>
-              <li>Links de redes sociais no topo da página</li>
-              <li>O visitante some pro Instagram e esquece de comprar</li>
-              <li>Redes sociais: só no rodapé</li>
-            </ul>
-          </div>
-          <div class="dont-card">
-            <div class="head"><i class="fa-solid fa-ban"></i> Erro Fatal 2</div>
-            <ul>
-              <li>Paredes de texto enorme</li>
-              <li>Parágrafos de mais de 4 linhas</li>
-              <li>Ninguém lê texto longo na internet</li>
-            </ul>
-          </div>
-          <div class="dont-card">
-            <div class="head"><i class="fa-solid fa-ban"></i> Erro Fatal 3</div>
-            <ul>
-              <li>Não testar no celular</li>
-              <li>80% do tráfego é mobile</li>
-              <li>Imagens lindas no PC ficam cortadas no celular</li>
-            </ul>
-          </div>
-          <div class="do-card">
-            <div class="head"><i class="fa-solid fa-check-circle"></i> Boas Práticas</div>
-            <ul>
-              <li>Parágrafos de no máximo 3 a 4 linhas</li>
-              <li>Negrito nas palavras-chave</li>
-              <li>Testar no celular antes de publicar</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(3)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo(5)">Próximo: Funil de Vendas <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 5 ══ -->
-  <section class="passo" id="passo-5">
-    <div class="passo-header">
-      <div class="passo-badge">🔻</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 5</div>
-        <div class="passo-title">O Funil de Vendas Digital</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      Vendas na internet seguem uma <strong>jornada previsível</strong>. O visitante passa por 3 etapas antes de comprar. Sua Landing Page precisa estar preparada para cada uma delas.
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-filter"></i> As 3 Etapas do Funil</div>
-        <table class="funil-table">
-          <thead>
-            <tr>
-              <th>Etapa</th>
-              <th>O que acontece</th>
-              <th>Como otimizar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="etapa-badge etapa-topo">🟠 Topo</span><br><small>Atração</small></td>
-              <td>O público ainda não te conhece. Chega via redes sociais, tráfego pago ou buscas.</td>
-              <td>Títulos chamativos e imagens que geram conexão imediata.</td>
-            </tr>
-            <tr>
-              <td><span class="etapa-badge etapa-meio">🔵 Meio</span><br><small>Consideração</small></td>
-              <td>O visitante lê sua página e avalia se seu produto resolve o problema dele.</td>
-              <td>Depoimentos, provas sociais, lista clara de benefícios e quebra de objeções.</td>
-            </tr>
-            <tr>
-              <td><span class="etapa-badge etapa-fundo">🟢 Fundo</span><br><small>Conversão</small></td>
-              <td>O momento de decisão. O visitante decide clicar no botão ou não.</td>
-              <td>Processo sem fricção: botão visível, formulário simples ou link direto pro WhatsApp.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="highlight teal">
-      <div class="highlight-icon">⚡</div>
-      <div class="highlight-body">
-        <strong>Velocidade Crítica no Atendimento</strong>
-        <span>Atender o cliente nos primeiros 5 minutos após o contato aumenta em até <strong>4 vezes</strong> a chance de conversão. No digital, quem responde rápido, vende mais.</span>
-      </div>
-    </div>
-
-    <div class="highlight blue">
-      <div class="highlight-icon">💬</div>
-      <div class="highlight-body">
-        <strong>Central de Dúvidas (FAQ)</strong>
-        <span>Uma seção de perguntas frequentes na sua Landing Page filtra os curiosos e poupa seu tempo operacional. Responda as dúvidas antes mesmo de o cliente perguntar.</span>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(4)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo(6)">Próximo: Métricas <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 6 ══ -->
-  <section class="passo" id="passo-6">
-    <div class="passo-header">
-      <div class="passo-badge blue">📊</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 6</div>
-        <div class="passo-title">Métricas — O que não é medido, não é gerenciado</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      Você não precisa de dashboards complexos para começar. Existem <strong>3 métricas básicas</strong> que já te dizem tudo o que você precisa saber sobre o desempenho da sua página.
-    </div>
-
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-num">👥</div>
-        <div style="font-size:15px;font-weight:800;color:var(--ink);margin-top:8px">Tráfego</div>
-        <div class="metric-label">Visitantes únicos que acessaram seu link</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-num">👆</div>
-        <div style="font-size:15px;font-weight:800;color:var(--ink);margin-top:8px">Cliques no CTA</div>
-        <div class="metric-label">Quem demonstrou intenção real de compra</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-num">%</div>
-        <div style="font-size:15px;font-weight:800;color:var(--ink);margin-top:8px">Taxa de Conversão</div>
-        <div class="metric-label">O percentual de visitantes que viraram clientes</div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:20px">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-calculator"></i> A Fórmula</div>
-        <div class="prompt-box" style="font-size:18px;text-align:center;padding:24px">
-          <div class="prompt-label">Taxa de Conversão</div>
-          Taxa = (Conversões ÷ Visitantes) × 100
-        </div>
-        <p>Exemplo: se 200 pessoas acessaram sua página e 10 compraram, sua taxa de conversão é <strong>5%</strong>. Uma Landing Page bem otimizada pode chegar a 10–15%.</p>
-      </div>
-    </div>
-
-    <div class="highlight orange">
-      <div class="highlight-icon">🔄</div>
-      <div class="highlight-body">
-        <strong>Pós-Venda e Retenção</strong>
-        <span>Conquistar um cliente novo custa de <strong>5 a 7 vezes mais</strong> do que manter um cliente atual. Desenvolva formas de manter contato após a venda — e-mail, WhatsApp, grupos — para oferecer novos produtos e coletar feedbacks reais.</span>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(5)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo(7)">Próximo: Mão na Massa <i class="fa-solid fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <!-- ══ PASSO 7 ══ -->
-  <section class="passo" id="passo-7">
-    <div class="passo-header">
-      <div class="passo-badge">🛠️</div>
-      <div class="passo-meta">
-        <div class="passo-label">Passo 7</div>
-        <div class="passo-title">Mão na Massa — Criando com IA + Google Sites</div>
-      </div>
-    </div>
-
-    <div class="passo-intro">
-      Teoria é ótimo, mas a sua Landing Page precisa existir de verdade. Siga este roteiro de <strong>3 fases</strong> para publicar a sua página hoje usando Inteligência Artificial + Google Sites.
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-robot"></i> Fase 1 — Gere o Conteúdo com IA</div>
-        <p>Acesse o ChatGPT ou Gemini e use o prompt abaixo. Troque <code>[SEU PRODUTO]</code> pelo seu produto ou serviço:</p>
-        <div class="prompt-box">
-          <button class="copy-btn" onclick="copyPrompt(this)">Copiar</button>
-          <div class="prompt-label">Prompt de Copywriting</div>
-          Atue como um Copywriter de alta conversão. Crie os textos estruturados para uma Landing Page de um <span>[SEU PRODUTO/SERVIÇO]</span>. Preciso de: 1 Headline (título impactante), 1 Subheadline (reforço do título), 3 Benefícios claros focados na dor do cliente, e 1 chamada para ação (CTA) objetiva.
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-globe"></i> Fase 2 — Monte no Google Sites</div>
-        <ul class="step-list">
-          <li class="step-item">
-            <div class="step-num blue">1</div>
-            <div class="step-content">
-              <strong>Acesse sites.google.com</strong>
-              <span>Entre com sua conta Google e clique em "Em Branco" para iniciar um projeto novo.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">2</div>
-            <div class="step-content">
-              <strong>Monte a Hero Section</strong>
-              <span>Insira o título e subtítulo gerados pela IA. Use o menu lateral de layouts para criar 3 colunas e distribua os benefícios.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">3</div>
-            <div class="step-content">
-              <strong>Adicione o Botão de WhatsApp</strong>
-              <span>Acesse wa.link, insira seu número e configure uma mensagem padrão. Copie o link gerado e vincule ao seu botão de CTA.</span>
-            </div>
-          </li>
-          <li class="step-item">
-            <div class="step-num blue">4</div>
-            <div class="step-content">
-              <strong>Publique e valide no celular</strong>
-              <span>Clique em "Publicar", defina um endereço amigável. Acesse no celular para testar como ficou antes de divulgar.</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <div class="section-label"><i class="fa-solid fa-book-open"></i> Fase 3 — Documentação Estratégica</div>
-        <p>Responda estas duas perguntas antes de divulgar sua página:</p>
-        <div class="highlight blue" style="margin-bottom:12px">
-          <div class="highlight-icon">📡</div>
-          <div class="highlight-body">
-            <strong>Canal de Aquisição</strong>
-            <span>De onde virá o público para esta página? (Ex: Instagram, indicações de amigos, tráfego pago, grupos do WhatsApp)</span>
-          </div>
-        </div>
-        <div class="highlight orange">
-          <div class="highlight-icon">💬</div>
-          <div class="highlight-body">
-            <strong>Roteiro de Abordagem</strong>
-            <span>Quando o cliente enviar a mensagem padrão do link do WhatsApp, qual será sua primeira resposta em até 3 linhas? Defina este padrão antes de publicar.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div style="background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-radius:var(--radius-lg);padding:22px 24px;margin-top:8px;border-left:4px solid var(--orange-light)">
-      <p style="color:rgba(255,255,255,.9);font-size:14px;font-style:italic;margin:0">"No desenvolvimento de tecnologia e negócios, o feedback rápido do mercado vale mais do que a perfeição estática. Um site funcional no ar ensina mais do que um projeto impecável nunca publicado."</p>
-      <p style="color:var(--orange-light);font-size:12px;font-weight:700;margin-top:8px">— Nota do Mentor</p>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn btn-ghost" onclick="goTo(6)"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
-      <button class="btn btn-primary" onclick="goTo('quiz')">Fazer o Quiz Final <i class="fa-solid fa-star"></i></button>
-    </div>
-  </section>
-
-</div><!-- /container -->
-
-<!-- ══ QUIZ ══ -->
-<div id="quiz-section" class="container">
-  <div class="quiz-header">
-    <h2>Quiz Final — Landing Page</h2>
-    <p>5 questões para consolidar o que você aprendeu</p>
-    <div class="quiz-progress-bar">
-      <div class="quiz-progress-fill" id="quiz-bar" style="width:0%"></div>
+      <span class="ico">🛡️</span>
+      <h4>Passa credibilidade</h4>
+      <p>Entre uma loja só com Instagram e outra com site bonito, fotos e CNPJ, qual passa mais confiança? O site coloca você na frente de quem não tem.</p>
     </div>
   </div>
 
-  <div class="quiz-card" id="quiz-card">
-    <div class="quiz-q-num" id="q-num">Questão 1 de 5</div>
-    <div class="quiz-q-text" id="q-text"></div>
-    <div class="quiz-options" id="q-opts"></div>
-    <div class="quiz-feedback" id="q-feedback"></div>
-    <div class="quiz-nav">
-      <button class="btn btn-primary" id="btn-next" onclick="nextQ()" style="display:none">
-        Próxima <i class="fa-solid fa-arrow-right"></i>
-      </button>
+  <div class="call warn"><span class="ic">🚫</span>
+    <h4>Pare de reclamar que "não consigo vender"</h4>
+    Um aluno dizia que não conseguia vender. No perfil dele não havia nem um link pra comprar! <b>Se você não tem um botão pra eu clicar e comprar, o problema não é o mercado — é a falta de uma página de vendas.</b></div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 2 ============ -->
+<section class="aula" id="a2">
+  <span class="eyebrow"><span class="chip">2</span> Aula 2</span>
+  <h2>Site × Landing Page: entenda a diferença 🆚</h2>
+  <p class="aula-sub">Os dois servem pra vender, mas têm funções diferentes. Saber qual usar muda o seu resultado.</p>
+
+  <div class="vs">
+    <div class="head a">🌐 Site</div>
+    <div class="head b">🎯 Landing Page</div>
+    <div class="col a">
+      <ul>
+        <li>Tem <b>várias páginas</b> da empresa.</li>
+        <li>Quem somos, produtos, contato, blog…</li>
+        <li>Mostra todo o universo do negócio.</li>
+        <li>É a "vitrine completa" da marca.</li>
+      </ul>
+    </div>
+    <div class="col b">
+      <ul>
+        <li>É <b>uma página só</b>, com um link.</li>
+        <li>Focada em <b>um produto ou serviço</b>.</li>
+        <li>Funciona como um vendedor.</li>
+        <li>Feita sob medida pro <b>tráfego pago</b>.</li>
+      </ul>
     </div>
   </div>
 
-  <div id="quiz-result" style="display:none">
-    <div class="result-card">
-      <div class="result-emoji" id="r-emoji">🏆</div>
-      <h2 id="r-title">Parabéns!</h2>
-      <p id="r-sub">Você concluiu o módulo de Landing Pages.</p>
-      <div class="result-score" id="r-score"></div>
-      <div class="result-label">acertos</div>
-      <div class="result-btns">
-        <button class="btn btn-primary" onclick="restartQuiz()"><i class="fa-solid fa-rotate"></i> Tentar de Novo</button>
-        <a href="./index.html" class="btn btn-ghost"><i class="fa-solid fa-home"></i> Voltar ao Portal</a>
-      </div>
+  <div class="call tip"><span class="ic">💡</span>
+    <h4>Mantra nº 1: uma página, um objetivo</h4>
+    Toda landing page precisa ter <b>uma única meta</b>. Nada de espalhar links de rede social, vários botões e mil opções. A pessoa que chega só pode fazer três coisas: <b>virar lead, comprar ou sair.</b> Mais opção = menos conversão. <b>Menos é mais.</b></div>
+
+  <p>👉 E o tráfego pago <b>nunca</b> deve ser enviado para a página inicial (home) do site. Ele vai sempre para uma landing page preparada para converter.</p>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 3 ============ -->
+<section class="aula" id="a3">
+  <span class="eyebrow"><span class="chip">3</span> Aula 3</span>
+  <h2>As 4 metas de uma landing page 🎯</h2>
+  <p class="aula-sub">Antes de escrever qualquer texto, defina <b>uma</b> meta. Toda a página vai existir só para alcançá-la. Escolha apenas uma.</p>
+
+  <div class="grid g4">
+    <div class="card">
+      <span class="meta-num">META 01</span>
+      <span class="ico">🛒</span>
+      <h4>Venda direta</h4>
+      <p>O cliente compra na hora, dentro do site, sem falar com ninguém. Típico de e-commerce.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 02</span>
+      <span class="ico">💬</span>
+      <h4>Lead no WhatsApp</h4>
+      <p>Um botão "Fale comigo" leva pro WhatsApp. Ótimo pra serviços e atendimento próximo.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 03</span>
+      <span class="ico">📧</span>
+      <h4>Lead por e-mail</h4>
+      <p>A pessoa cadastra o e-mail. Ideal pra captar muito volume e enviar novidades depois.</p>
+    </div>
+    <div class="card">
+      <span class="meta-num">META 04</span>
+      <span class="ico">📝</span>
+      <h4>Lead qualificado</h4>
+      <p>Formulário com nome, e-mail e perguntas (ex.: faturamento). Você só fala com quem tem perfil.</p>
     </div>
   </div>
-</div>
 
-<div class="footer">
-  <strong>Analice Pessoa · English</strong> — Módulo Tecnologia &amp; Negócios<br>
-  Conteúdo elaborado pela Prof. Analice Pessoa · Todos os direitos reservados
-</div>
+  <div class="call do"><span class="ic">✍️</span>
+    <h4>Atividade — defina a sua meta</h4>
+    Pense no seu produto ou serviço principal e responda: <b>qual das 4 metas faz mais sentido pra ele agora?</b> Escreva em uma frase. Essa decisão vai guiar todo o resto do e-book.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 4 ============ -->
+<section class="aula" id="a4">
+  <span class="eyebrow"><span class="chip">4</span> Aula 4</span>
+  <h2>Anatomia da página que converte 🧠</h2>
+  <p class="aula-sub">Uma landing page que vende tem um "corpo perfeito": <b>cabeça, corpo e pés</b>. Você pode errar nos pés e no corpo… mas <b>nunca</b> na cabeça.</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 360 470" role="img" aria-label="Diagrama da anatomia de uma landing page dividida em cabeça, corpo e pés">
+      <!-- phone frame -->
+      <rect x="60" y="12" width="240" height="446" rx="28" fill="#0a3a2d" stroke="#1c8a6b" stroke-width="2"/>
+      <rect x="72" y="26" width="216" height="418" rx="18" fill="#ffffff"/>
+      <!-- CABEÇA -->
+      <rect x="72" y="26" width="216" height="150" rx="18" fill="#E3F1EC"/>
+      <rect x="72" y="158" width="216" height="18" fill="#E3F1EC"/>
+      <rect x="92" y="50" width="176" height="14" rx="5" fill="#0E6B53"/>
+      <rect x="92" y="70" width="140" height="9" rx="4" fill="#9bbcb1"/>
+      <rect x="92" y="84" width="120" height="9" rx="4" fill="#9bbcb1"/>
+      <rect x="100" y="108" width="160" height="30" rx="9" fill="#FF5A3C"/>
+      <text x="180" y="128" text-anchor="middle" font-family="Inter" font-size="13" font-weight="700" fill="#fff">COMPRAR AGORA</text>
+      <text x="92" y="153" font-family="Inter" font-size="10" fill="#0E6B53">★★★★★ prova social</text>
+      <!-- CORPO -->
+      <rect x="92" y="196" width="80" height="9" rx="4" fill="#cdd8d3"/>
+      <rect x="92" y="214" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="226" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="238" width="140" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="262" width="80" height="54" rx="8" fill="#FBEFD8"/>
+      <rect x="188" y="262" width="80" height="54" rx="8" fill="#FBEFD8"/>
+      <rect x="92" y="330" width="176" height="7" rx="3" fill="#e3e9e6"/>
+      <rect x="92" y="342" width="150" height="7" rx="3" fill="#e3e9e6"/>
+      <!-- PÉS -->
+      <rect x="92" y="372" width="176" height="14" rx="5" fill="#cdd8d3"/>
+      <rect x="100" y="398" width="160" height="30" rx="9" fill="#FF5A3C"/>
+      <text x="180" y="418" text-anchor="middle" font-family="Inter" font-size="12" font-weight="700" fill="#fff">QUERO GARANTIR</text>
+      <!-- labels -->
+      <g font-family="Bricolage Grotesque" font-weight="800">
+        <text x="14" y="100" font-size="15" fill="#ffd98a">CABEÇA</text>
+        <text x="296" y="270" font-size="15" fill="#ffd98a" text-anchor="start">CORPO</text>
+        <text x="14" y="410" font-size="15" fill="#ffd98a">PÉS</text>
+      </g>
+      <line x1="14" y1="106" x2="58" y2="106" stroke="#ffd98a" stroke-width="1.5"/>
+      <line x1="302" y1="276" x2="302" y2="276" stroke="#ffd98a"/>
+      <line x1="14" y1="416" x2="58" y2="416" stroke="#ffd98a" stroke-width="1.5"/>
+    </svg>
+    <p class="figcap">🦴 Sem pernas ou braços dá pra viver. Sem cabeça, não. É na cabeça que está a conversão.</p>
+  </div>
+
+  <div class="passo">
+    <div class="num">🧠</div>
+    <div>
+      <h3>A CABEÇA — chamar a atenção (não pode errar!)</h3>
+      <p>É a parte de cima, que aparece <b>sem rolar a página</b>. Tem 3 pilares obrigatórios:</p>
+      <ul class="dots">
+        <li><b>Headline</b> 🎤 — a promessa forte. Ninguém compra o produto, compra a promessa. (Você não compra um hambúrguer, compra matar a fome com algo gostoso.)</li>
+        <li><b>Subheadline</b> 📝 — uma explicação rápida do que você vende.</li>
+        <li><b>Botão / CTA</b> 🔘 — um botão gigante e destacado, com cor diferente, que puxa o olhar.</li>
+      </ul>
+      <p style="margin-bottom:0">✨ Bônus que as gigantes usam: logo abaixo, uma <b>prova social</b> (avaliações, notas, ★★★★★). Amazon e Mercado Livre fazem isso.</p>
+    </div>
+  </div>
+
+  <div class="passo">
+    <div class="num">💪</div>
+    <div>
+      <h3>O CORPO — convencer (persuasão)</h3>
+      <p>Aqui você usa elementos para provar que é o melhor:</p>
+      <ul class="dots">
+        <li>🎁 <b>Benefícios</b> — o que a pessoa ganha ao comprar.</li>
+        <li>⭐ <b>Prova social</b> — depoimentos reais de clientes.</li>
+        <li>📊 <b>Prova lógica</b> — resultados e números (ex.: "90% passa de primeira").</li>
+        <li>📸 <b>Desejo</b> — boas fotos e vídeos que criam vontade.</li>
+        <li>❓ <b>Quebra de objeções</b> — perguntas frequentes que matam as dúvidas.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="passo">
+    <div class="num">🦶</div>
+    <div>
+      <h3>OS PÉS — dar segurança e fechar</h3>
+      <p>Quem rolou até aqui está muito interessado. É a hora de tirar a última insegurança:</p>
+      <ul class="dots">
+        <li>✅ <b>Garantia</b> — reduz o risco da decisão.</li>
+        <li>⏳ <b>Escassez e urgência</b> — poucas vagas, oferta por tempo limitado.</li>
+        <li>👉 <b>Chamada final</b> — "compre agora e tenha acesso imediato".</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="call fact"><span class="ic">📈</span>
+    <h4>O que é ROI?</h4>
+    Uma landing page de <b>alta conversão</b> é aquela que dá <b>ROI</b> (Retorno sobre o Investimento): você coloca um dinheiro e ele volta multiplicado — até de gente que nunca te conhecia (tráfego frio).</div>
+
+  <blockquote>
+    Regra de Pareto 🍞: em quase toda empresa, <b>80% do faturamento vem de uns poucos produtos</b>. Não crie uma página pra cada item — foque no seu "pão de padaria", o que vende com mais facilidade.
+    <cite>— Estratégia do menos é mais</cite>
+  </blockquote>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 5 ============ -->
+<section class="aula" id="a5">
+  <span class="eyebrow"><span class="chip">5</span> Aula 5</span>
+  <h2>Benchmark imbatível 🔭</h2>
+  <p class="aula-sub">"Não sou criativo" não é mais desculpa. Você não precisa inventar a roda — basta modelar quem já vende.</p>
+
+  <div class="passo">
+    <div class="num">1</div>
+    <div>
+      <h3>📷 Capture páginas que você admira</h3>
+      <p>Instale a extensão gratuita <b>GoFullPage</b> (procure por "GoFullPage Chrome Store"). Em qualquer landing page bonita, clique em "capturar página inteira" — ela vira uma imagem.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div>
+      <h3>🗂️ Monte uma "pasta de ideias"</h3>
+      <p>Salve essas imagens no computador. Toda vez que vir uma boa página, guarde ali. Vira o seu banco de inspirações.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div>
+      <h3>🤖 Entregue a referência pra IA</h3>
+      <p>Abra a IA, envie a imagem da página que funciona e peça: <i>"use a mesma estrutura desta landing page (headline, subheadline, seções) para criar a página do meu negócio: [descreva o seu negócio]"</i>. Em segundos você tem um rascunho completo.</p>
+    </div>
+  </div>
+
+  <div class="call tip"><span class="ic">💡</span>
+    <h4>Modele a estrutura, não copie o conteúdo</h4>
+    Aproveite o <b>esqueleto</b> que já converte e coloque os <b>seus</b> diferenciais, suas palavras e suas fotos. Inspiração não é cópia.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 6 ============ -->
+<section class="aula" id="a6">
+  <span class="eyebrow"><span class="chip">6</span> Aula 6</span>
+  <h2>Crie sua página com IA — passo a passo 🤖</h2>
+  <p class="aula-sub">Existem dois caminhos: o "modo antigo" (construtores) e o caminho com IA, muito mais rápido. Você só precisa clicar uns poucos botões.</p>
+
+  <h3 style="margin:8px 0 14px;font-size:20px">🏗️ Caminho A — Construtor (modo clássico)</h3>
+  <div class="passo">
+    <div class="num">1</div>
+    <div><h3>Tenha hospedagem + domínio</h3><p>Hospedar é "alugar" um espaço pro site (≈ R$ 15 a R$ 20/mês). Empresas como Hostinger e HostGator costumam dar o domínio (<i>suaempresa.com.br</i>) de graça no plano anual.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div><h3>Use um construtor visual</h3><p>No WordPress, ferramentas como o <b>Elementor</b> deixam você arrastar elementos (texto, botão, vídeo) e montar a página. Melhor ainda: comece por um <b>modelo pronto</b> e só troque os textos e fotos.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div><h3>Publique</h3><p>Inseriu o modelo, ajustou textos, colocou seu WhatsApp no botão → clique em <b>Publicar</b>. Pronto, a página está no ar.</p></div>
+  </div>
+
+  <h3 style="margin:26px 0 14px;font-size:20px">⚡ Caminho B — IA (modo rápido)</h3>
+  <div class="passo">
+    <div class="num">1</div>
+    <div><h3>Abra uma ferramenta de IA de sites</h3><p>Ex.: <b>Lovable</b>. Funciona como um "consultor" que cria a página a partir do que você descreve.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div><h3>Escreva um prompt simples e direto</h3>
+      <p>Diga o objetivo, o negócio e o estilo. Exemplo:</p>
+      <blockquote style="margin-top:6px">"Faça uma landing page para <b>tráfego pago</b> que leve as pessoas para o <b>WhatsApp</b>. É um <b>salão de beleza premium</b>. Use fundo preto e dourado."</blockquote>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div><h3>Responda as perguntas e gere</h3><p>A IA pode perguntar a direção de design e as cores. Escolha e deixe construir. Em poucos minutos a página aparece pronta pra ajustar.</p></div>
+  </div>
+  <div class="passo">
+    <div class="num">4</div>
+    <div><h3>Peça as tags e o pixel</h3><p>Escreva: <i>"instale a Tag do Google e o Pixel da Meta"</i>. A IA faz isso pra você — e a página fica pronta pra anunciar.</p></div>
+  </div>
+
+  <div class="call warn"><span class="ic">⚠️</span>
+    <h4>Deu erro? É normal</h4>
+    Às vezes a IA erra ou copia demais a referência. É só pedir pra <b>corrigir</b> ("analise os erros e ajuste") ou refazer o prompt. Faz parte do processo — não desista no primeiro tropeço.</div>
+
+  <div class="block">
+    <h3><span class="em">🧰</span>Ferramentas citadas</h3>
+    <ul class="dots">
+      <li><b>Landing pages / sites:</b> Elementor Pro + WordPress, Wix, Lovable.</li>
+      <li><b>Hospedagem:</b> Hostinger, HostGator.</li>
+      <li><b>E-commerce (loja):</b> Shopify, Loja Tray, Loja Integrada.</li>
+      <li><b>Captura de tela:</b> GoFullPage (extensão do Chrome).</li>
+    </ul>
+  </div>
+
+  <div class="call tip"><span class="ic">🎯</span>
+    <h4>A ferramenta não é o segredo — a estratégia é</h4>
+    "X é melhor que Y?" Não importa tanto. Se a estratégia estiver certa, qualquer ferramenta funciona. Para quem está começando, o mais barato e simples já resolve. <b>Se você não vende com o simples, não vai vender com o caro.</b></div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 7 ============ -->
+<section class="aula" id="a7">
+  <span class="eyebrow"><span class="chip">7</span> Aula 7</span>
+  <h2>Tudo é marketing 🍔</h2>
+  <p class="aula-sub">A foto, o vídeo, o texto, a promessa: tudo comunica. Mude a percepção e você muda as vendas.</p>
+
+  <div class="call fact"><span class="ic">🍔</span>
+    <h4>A lição do McDonald's</h4>
+    No anúncio, o lanche é lindo e perfeito (a <b>expectativa</b>). O que chega na bandeja é mais simples (a <b>realidade</b>). A foto vende. Por isso: prometa bem com a imagem — e depois entregue, de preferência <b>surpreendendo</b>.</div>
+
+  <div class="grid g2">
+    <div class="card">
+      <span class="ico">🏚️</span>
+      <h4>O problema não é o produto</h4>
+      <p>Um corretor dizia que "imóvel não vende na internet". As fotos é que eram ruins — escuras e quadriculadas. Ninguém compra o imóvel: compra a <b>foto</b> do imóvel.</p>
+    </div>
+    <div class="card">
+      <span class="ico">✨</span>
+      <h4>Resolva com IA</h4>
+      <p>Abra a janela, use uma luz simples e peça pra IA: <i>"melhore esta foto, deixe iluminada e bonita"</i>. Pronto — você cria desejo onde antes havia uma "prisão".</p>
+    </div>
+  </div>
+
+  <blockquote>
+    Lembre-se: tudo é promessa. Quando você melhora a foto, o vídeo e o texto, muda a percepção do cliente — e passa a usar o marketing a seu favor o tempo todo.
+  </blockquote>
+</section>
+
+<hr class="div">
+
+<!-- ============ FINAL ============ -->
+<section class="aula reveal" id="a8">
+  <span class="eyebrow"><span class="chip">8</span> Aula 8</span>
+  <h2>Hacks e erros fatais no Google Sites 🛠️</h2>
+  <p class="aula-sub">A diferença entre uma página amadora e uma profissional muitas vezes está em pequenos detalhes. Veja os truques que funcionam — e os erros que afundam a sua página.</p>
+
+  <div class="call do"><span class="ic">✨</span>
+    <h4>Truques de mestre</h4>
+    Pequenos ajustes que aumentam muito a conversão.</div>
+
+  <div class="passo">
+    <div class="num">1</div>
+    <div>
+      <h3>🙈 Oculte o menu de navegação</h3>
+      <p>Vá em <b>Configurações → Navegação</b> e escolha "Oculto". Uma landing page não pode ter distrações: o visitante só deve ter duas opções — clicar no botão ou fechar a página.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">2</div>
+    <div>
+      <h3>🌬️ Dê respiro visual (espaçadores)</h3>
+      <p>Uma página amontoada parece amadora. Use a ferramenta <b>"Divisor"</b> do Google Sites ou crie blocos vazios entre as seções. Espaço em branco não é desperdício — é elegância.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">3</div>
+    <div>
+      <h3>🎨 Alterne as cores de fundo</h3>
+      <p>Intercale: primeiro bloco branco, segundo cinza bem claro, terceiro branco de novo. Isso ajuda o olho do visitante a perceber que mudou de assunto. Use a paleta lateral em cada seção.</p>
+    </div>
+  </div>
+  <div class="passo">
+    <div class="num">4</div>
+    <div>
+      <h3>💬 Botão flutuante de WhatsApp</h3>
+      <p>Para os mais corajosos: use o componente <b>"Incorporar Código"</b> e cole um script HTML com um ícone de WhatsApp flutuante no canto da tela. Isso aumenta a conversão de forma absurda.</p>
+    </div>
+  </div>
+
+  <div class="call warn"><span class="ic">🚫</span>
+    <h4>O que NUNCA fazer</h4>
+    Três erros fatais que espantam o cliente antes mesmo de ele decidir.</div>
+
+  <div class="grid g2">
+    <div class="block">
+      <h3>📱 Redes sociais no topo</h3>
+      <p>Nunca coloque o ícone do Instagram na primeira tela. Se o visitante clicar, ele vai ver memes e esquece de comprar. Redes sociais só no rodapé — e olhe lá.</p>
+    </div>
+    <div class="block">
+      <h3>📜 Paredes de texto</h3>
+      <p>Ninguém lê textos longos na internet. Quebre tudo em parágrafos de no máximo 3 ou 4 linhas e use negrito para destacar as palavras-chave.</p>
+    </div>
+  </div>
+
+  <div class="call warn"><span class="ic">📵</span>
+    <h4>Esquecer do celular é o pior erro</h4>
+    Mais de <b>80% do tráfego é mobile</b>. Construir no computador e nunca olhar como ficou no celular é receita de fracasso — imagens lindas no PC podem aparecer cortadas no telefone. Sempre teste no celular antes de publicar.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 9 ============ -->
+<section class="aula reveal" id="a9">
+  <span class="eyebrow"><span class="chip">9</span> Aula 9</span>
+  <h2>O funil de vendas digital 🔻</h2>
+  <p class="aula-sub">Vender na internet segue uma jornada previsível. O visitante passa por três etapas antes de decidir — e a sua página precisa estar pronta para cada uma delas.</p>
+
+  <div class="vs">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--line)">
+      <h3 style="color:var(--coral)">🟠 Topo · Atração</h3>
+      <p style="margin-top:6px">O público ainda não te conhece. Chega pelas redes sociais, anúncios ou buscas.</p>
+      <p style="margin-top:6px"><b>Como otimizar:</b> títulos chamativos e imagens que criam conexão imediata.</p>
+    </div>
+    <div style="padding:18px 20px;border-bottom:1px solid var(--line);border-left:1px solid var(--line)">
+      <h3 style="color:var(--teal)">🔵 Meio · Consideração</h3>
+      <p style="margin-top:6px">O visitante lê a página e avalia se o seu produto resolve o problema dele.</p>
+      <p style="margin-top:6px"><b>Como otimizar:</b> depoimentos, provas sociais, benefícios claros e quebra de objeções.</p>
+    </div>
+    <div style="padding:18px 20px">
+      <h3 style="color:var(--teal-deep)">🟢 Fundo · Conversão</h3>
+      <p style="margin-top:6px">O momento da decisão. O visitante escolhe clicar no botão — ou não.</p>
+      <p style="margin-top:6px"><b>Como otimizar:</b> processo sem fricção: botão visível e link direto para o atendimento.</p>
+    </div>
+  </div>
+
+  <div class="call fact"><span class="ic">⚡</span>
+    <h4>Velocidade fecha vendas</h4>
+    Atender o cliente nos <b>primeiros 5 minutos</b> após o contato aumenta em até <b>4 vezes</b> a chance de conversão. No digital, quem responde rápido vende mais.</div>
+
+  <div class="call tip"><span class="ic">💬</span>
+    <h4>Crie uma central de dúvidas (FAQ)</h4>
+    Uma seção de perguntas frequentes na sua página responde as objeções antes mesmo de o cliente perguntar — filtra os curiosos e poupa o seu tempo.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ AULA 10 ============ -->
+<section class="aula reveal" id="a10">
+  <span class="eyebrow"><span class="chip">10</span> Aula 10</span>
+  <h2>Métricas e pós-venda 📊</h2>
+  <p class="aula-sub">O que não é medido não é gerenciado. Você não precisa de relatórios complexos para começar — só de três números e de um bom relacionamento depois da venda.</p>
+
+  <div class="grid g4">
+    <div class="block" style="text-align:center">
+      <h3>👥 Tráfego</h3>
+      <p>Quantas pessoas únicas acessaram o seu link.</p>
+    </div>
+    <div class="block" style="text-align:center">
+      <h3>👆 Cliques no botão</h3>
+      <p>Quantas demonstraram intenção real ao clicar no CTA.</p>
+    </div>
+    <div class="block" style="text-align:center">
+      <h3>📈 Taxa de conversão</h3>
+      <p>O percentual de visitantes que viraram clientes.</p>
+    </div>
+  </div>
+
+  <div class="call fact"><span class="ic">🧮</span>
+    <h4>A fórmula da conversão</h4>
+    <b>Taxa = (Conversões ÷ Visitantes) × 100.</b> Se 200 pessoas acessaram e 10 compraram, sua conversão é de 5%. Uma página bem feita pode chegar a 10–15%.</div>
+
+  <div class="call tip"><span class="ic">🔄</span>
+    <h4>O cliente não acaba na venda</h4>
+    Conquistar um cliente novo custa de <b>5 a 7 vezes mais</b> do que manter um atual. Crie o hábito de manter contato depois da compra — para oferecer novidades e coletar feedbacks reais.</div>
+
+  <div class="call do"><span class="ic">🚀</span>
+    <h4>Nota do mentor</h4>
+    Um site funcional no ar ensina mais do que um projeto perfeito que nunca foi publicado. Coloque sua página no ar, teste do começo ao fim e use os dados reais dos clientes para melhorar.</div>
+</section>
+
+<hr class="div">
+
+<!-- ============ FINAL ============ -->
+<section class="aula" id="final">
+  <span class="eyebrow"><span class="chip">★</span> Para fixar</span>
+  <h2>Checklist, glossário e atividades 🎓</h2>
+  <p class="aula-sub">Use estas ferramentas para revisar tudo e colocar a mão na massa.</p>
+
+  <h3 style="font-size:21px;margin-bottom:12px">✅ Checklist da landing page que converte</h3>
+  <div class="checklist">
+    <label><input type="checkbox"><span><span class="ct">Defini UMA meta</span><span class="cd">Venda direta, WhatsApp, e-mail ou formulário.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Headline com promessa forte</span><span class="cd">Aparece sem rolar a página.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Subheadline explicativa</span><span class="cd">Diz em 1 frase o que você vende.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Botão (CTA) grande e destacado</span><span class="cd">Cor diferente, puxando o olhar.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Prova social</span><span class="cd">Avaliações, notas ou depoimentos.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Benefícios e prova lógica</span><span class="cd">O que ganha + números reais.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Quebra de objeções</span><span class="cd">Perguntas frequentes respondidas.</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Garantia + escassez no fechamento</span><span class="cd">Segurança e urgência nos "pés".</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Fotos e vídeos de qualidade</span><span class="cd">Criam desejo (melhore com IA se preciso).</span></span></label>
+    <label><input type="checkbox"><span><span class="ct">Tag do Google + Pixel da Meta instalados</span><span class="cd">Página pronta para anunciar.</span></span></label>
+  </div>
+
+  <h3 style="font-size:21px;margin:30px 0 12px">🗣️ Glossário com pronúncia aproximada</h3>
+  <div class="gloss">
+    <div class="row"><span class="term">Landing page</span><span class="pron">(lén-ding pêi-dji)</span><span class="def">Página única, feita pra converter o visitante em cliente ou lead.</span></div>
+    <div class="row"><span class="term">Headline</span><span class="pron">(réd-láin)</span><span class="def">O título principal: a grande promessa da página.</span></div>
+    <div class="row"><span class="term">Subheadline</span><span class="pron">(sãb-réd-láin)</span><span class="def">A linha de apoio que explica rapidamente o que você vende.</span></div>
+    <div class="row"><span class="term">CTA · Call to action</span><span class="pron">(côl tchu ék-chãn)</span><span class="def">Chamada para ação — o botão que diz o que fazer ("Comprar agora").</span></div>
+    <div class="row"><span class="term">Lead</span><span class="pron">(líd)</span><span class="def">Contato interessado que deixou WhatsApp, e-mail ou preencheu o formulário.</span></div>
+    <div class="row"><span class="term">ROI</span><span class="pron">(é-ô-í / "rôi")</span><span class="def">Retorno sobre o Investimento: quanto volta pra cada real investido.</span></div>
+    <div class="row"><span class="term">Benchmark</span><span class="pron">(bêntch-mârk)</span><span class="def">Analisar e modelar referências que já dão certo no mercado.</span></div>
+    <div class="row"><span class="term">Copy</span><span class="pron">(cópi)</span><span class="def">O texto persuasivo da página.</span></div>
+    <div class="row"><span class="term">Pixel / Tag</span><span class="pron">(píc-sel / tég)</span><span class="def">Códigos que registram quem visita o site para a Meta e o Google.</span></div>
+    <div class="row"><span class="term">Tráfego pago</span><span class="pron">(tráfego pago)</span><span class="def">Anúncios pagos no Google, Instagram, Facebook e YouTube.</span></div>
+  </div>
+
+  <h3 style="font-size:21px;margin:30px 0 12px">🧩 Quiz rápido</h3>
+
+  <div class="quiz">
+    <div class="q">1. Quantas metas uma landing page deve ter?</div>
+    <div class="opts">
+      <label><input type="radio" name="q1"> Quantas couberem na página</label>
+      <label><input type="radio" name="q1"> Apenas uma</label>
+      <label><input type="radio" name="q1"> Pelo menos três</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>Apenas uma.</b> Mantra nº 1: uma página, um objetivo. Menos é mais.</p></details>
+  </div>
+
+  <div class="quiz">
+    <div class="q">2. Em qual parte da página você NÃO pode errar?</div>
+    <div class="opts">
+      <label><input type="radio" name="q2"> Nos pés</label>
+      <label><input type="radio" name="q2"> No corpo</label>
+      <label><input type="radio" name="q2"> Na cabeça</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>Na cabeça.</b> Sem braços ou pernas dá pra viver; sem cabeça, não. É lá que está a headline, a subheadline e o botão.</p></details>
+  </div>
+
+  <div class="quiz">
+    <div class="q">3. Por que ter um site é melhor que depender só do Instagram?</div>
+    <div class="opts">
+      <label><input type="radio" name="q3"> Porque é mais barato</label>
+      <label><input type="radio" name="q3"> Porque o site é seu — a rede social é "casa alugada"</label>
+      <label><input type="radio" name="q3"> Porque o Instagram não tem público</label>
+    </div>
+    <details><summary>Ver resposta</summary><p>✅ <b>O site é seu.</b> A rede social pode te bloquear a qualquer momento; o site você controla, coleta dados e vende no automático.</p></details>
+  </div>
+
+  <div class="call do" style="margin-top:8px"><span class="ic">🚀</span>
+    <h4>Atividade final — sua primeira landing page</h4>
+    1) Escolha o produto "pão de padaria". 2) Defina a meta. 3) Capture 2 páginas de referência com o GoFullPage. 4) Peça pra IA criar a sua, usando a estrutura cabeça-corpo-pés. 5) Rode o checklist acima. <b>Acabou a desculpa! 💪</b></div>
+</section>
+
+</main>
+
+<footer>
+  <p><strong>📘 Crie Landing Pages que Vendem com IA</strong></p>
+  <p>Material didático · Marketing digital na prática · Estratégia antes do botão</p>
+</footer>
 
 <script>
-// ── PASSO NAVIGATION ──
-let currentStep = 1;
-const STEPS = [1,2,3,4,5,6,7,'quiz'];
-
-function goTo(step){
-  // esconde tudo
-  document.querySelectorAll('.passo').forEach(p=>p.classList.remove('active'));
-  document.getElementById('quiz-section').classList.remove('active');
-
-  if(step==='quiz'){
-    document.getElementById('quiz-section').classList.add('active');
-    initQuiz();
-  } else {
-    document.getElementById('passo-'+step).classList.add('active');
+  // reading progress
+  var bar=document.getElementById('progress');
+  function onScroll(){
+    var h=document.documentElement;
+    var sc=(h.scrollTop)/(h.scrollHeight-h.clientHeight);
+    bar.style.width=(sc*100)+'%';
   }
+  document.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-  // atualiza timeline
-  document.querySelectorAll('.tl-step').forEach(el=>{
-    const ds = el.dataset.step==='quiz'?'quiz':parseInt(el.dataset.step);
-    el.classList.remove('active','done');
-    if(ds===step) el.classList.add('active');
-    else if(step!=='quiz' && typeof ds==='number' && ds<step) el.classList.add('done');
-    else if(step==='quiz') el.classList.add('done');
-  });
-
-  currentStep=step;
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-// ── ANATOMY ACCORDION ──
-function toggleCard(head){
-  const card=head.parentElement;
-  card.classList.toggle('open');
-}
-
-// ── COPY PROMPT ──
-function copyPrompt(btn){
-  const box=btn.parentElement;
-  const text=box.innerText.replace('Copiar','').replace('Prompt de Copywriting','').trim();
-  navigator.clipboard.writeText(text).then(()=>{
-    btn.textContent='Copiado!';
-    setTimeout(()=>btn.textContent='Copiar',2000);
-  });
-}
-
-// ── QUIZ ──
-const questions = [
-  {
-    q:"O que é a 'primeira dobra' de uma Landing Page?",
-    opts:["O rodapé com os links legais","O conteúdo visível sem rolar a tela","O menu de navegação principal","A seção de depoimentos"],
-    c:1,
-    fb:"Correto! A primeira dobra (Hero Section) é exatamente o que o visitante vê assim que a página carrega, sem precisar rolar. Você tem 3 segundos para convencê-lo a ficar."
-  },
-  {
-    q:"Qual é a regra de contraste para o botão de CTA (Call to Action)?",
-    opts:["Usar a mesma cor do fundo para harmonia","Usar uma cor complementar de alto contraste","Usar sempre a cor branca","Usar a cor favorita do designer"],
-    c:1,
-    fb:"Exato! Se o site é azul, o botão deve ser laranja ou amarelo — uma cor que 'grite' na tela e seja impossível de ignorar."
-  },
-  {
-    q:"Por que NÃO se deve colocar links para redes sociais no topo da Landing Page?",
-    opts:["Porque fica feio visualmente","Porque as redes sociais são lentas","Porque o visitante pode clicar, ir para o Instagram e esquecer de comprar","Porque o Google Sites não permite"],
-    c:2,
-    fb:"Exatamente! O visitante clica no Instagram, começa a ver stories, e adeus conversão. Redes sociais ficam apenas no rodapé."
-  },
-  {
-    q:"Qual é a fórmula da Taxa de Conversão?",
-    opts:["(Visitantes ÷ Conversões) × 100","Conversões × Visitantes","(Conversões ÷ Visitantes) × 100","Cliques ÷ Visitantes"],
-    c:2,
-    fb:"Correto! A Taxa de Conversão = (Conversões ÷ Visitantes) × 100. Se 200 pessoas acessaram e 10 compraram, a taxa é 5%."
-  },
-  {
-    q:"Segundo o conteúdo do módulo, atender o cliente em até 5 minutos após o contato aumenta a chance de conversão em quantas vezes?",
-    opts:["2 vezes","4 vezes","8 vezes","10 vezes"],
-    c:1,
-    fb:"Isso mesmo! Atender nos primeiros 5 minutos aumenta em até 4 vezes a chance de fechar a venda. No digital, velocidade é dinheiro."
+  // reveal on scroll
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
   }
-];
-
-let qIdx=0, score=0, answered=false, quizInit=false;
-
-function initQuiz(){
-  if(quizInit)return;
-  quizInit=true;
-  qIdx=0; score=0;
-  renderQ();
-}
-function restartQuiz(){
-  qIdx=0; score=0; quizInit=false; answered=false;
-  document.getElementById('quiz-result').style.display='none';
-  document.getElementById('quiz-card').style.display='block';
-  initQuiz();
-}
-function renderQ(){
-  answered=false;
-  const q=questions[qIdx];
-  document.getElementById('q-num').textContent=`Questão ${qIdx+1} de ${questions.length}`;
-  document.getElementById('q-text').textContent=q.q;
-  document.getElementById('quiz-bar').style.width=(qIdx/questions.length*100)+'%';
-  document.getElementById('q-feedback').className='quiz-feedback';
-  document.getElementById('q-feedback').textContent='';
-  document.getElementById('btn-next').style.display='none';
-
-  const opts=document.getElementById('q-opts');
-  opts.innerHTML='';
-  const letters=['A','B','C','D'];
-  q.opts.forEach((o,i)=>{
-    const btn=document.createElement('button');
-    btn.className='quiz-opt';
-    btn.innerHTML=`<span class="quiz-opt-letter">${letters[i]}</span>${o}`;
-    btn.onclick=()=>answer(i,q.c,q.fb);
-    opts.appendChild(btn);
-  });
-}
-function answer(chosen,correct,fb){
-  if(answered)return;
-  answered=true;
-  const btns=document.querySelectorAll('.quiz-opt');
-  btns.forEach((b,i)=>{
-    b.disabled=true;
-    if(i===correct)b.classList.add('correct');
-    else if(i===chosen&&chosen!==correct)b.classList.add('wrong');
-  });
-  if(chosen===correct)score++;
-  const fd=document.getElementById('q-feedback');
-  fd.textContent=(chosen===correct?'✅ ':'❌ ')+fb;
-  fd.className='quiz-feedback show '+(chosen===correct?'ok':'err');
-  document.getElementById('btn-next').style.display='inline-flex';
-  document.getElementById('btn-next').textContent=qIdx<questions.length-1?'Próxima →':'Ver Resultado 🏆';
-}
-function nextQ(){
-  qIdx++;
-  if(qIdx<questions.length){ renderQ(); return; }
-  // resultado
-  document.getElementById('quiz-bar').style.width='100%';
-  document.getElementById('quiz-card').style.display='none';
-  document.getElementById('quiz-result').style.display='block';
-  document.getElementById('r-score').textContent=`${score}/${questions.length}`;
-  const pct=score/questions.length;
-  document.getElementById('r-emoji').textContent=pct>=0.8?'🏆':pct>=0.5?'👍':'💪';
-  document.getElementById('r-title').textContent=pct>=0.8?'Excelente!':pct>=0.5?'Bom trabalho!':'Continue praticando!';
-  document.getElementById('r-sub').textContent=pct>=0.8?'Você dominou o módulo de Landing Pages!':pct>=0.5?'Você está no caminho certo. Revise os passos e tente de novo!':'Não desanime — revise o conteúdo e tente novamente!';
-}
 </script>
 </body>
 </html>
